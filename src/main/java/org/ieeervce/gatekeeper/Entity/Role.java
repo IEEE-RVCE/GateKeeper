@@ -1,9 +1,15 @@
-package Entity;
+package org.ieeervce.gatekeeper.Entity;
 import jakarta.persistence.*;
+
+@Entity
 public class Role {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private int ID;
+
     @Column(unique = true,nullable = false)
-    private int id;
+    private int value;
 
     @Column(unique = true,nullable = false)
     private String roleName;

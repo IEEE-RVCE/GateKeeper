@@ -1,10 +1,11 @@
-package Entity;
+package org.ieeervce.gatekeeper.Entity;
 
 
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,8 @@
-package service;
+package org.ieeervce.gatekeeper.service;
 
 import org.springframework.stereotype.*;
-import repository.UserRepository;
-import Entity.User;
+import org.ieeervce.gatekeeper.repository.UserRepository;
+import org.ieeervce.gatekeeper.Entity.User;
 
 import java.util.*;
 

@@ -1,6 +1,13 @@
-package Entity;
+package org.ieeervce.gatekeeper.Entity;
 import jakarta.persistence.*;
+
+@Entity
+
 public class ReviewLog {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private int id;
     @Column(nullable = false)
     private int userId;
 
@@ -11,7 +18,7 @@ public class ReviewLog {
 
 
     @Enumerated(EnumType.STRING)
-    private statusEnum status;
+    private StatusEnum status;
     @Column(nullable = true)
     private String comments;
 }

@@ -1,8 +1,11 @@
-package Entity;
+package org.ieeervce.gatekeeper.Entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+@Entity
+
 public class RequestForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +24,7 @@ public class RequestForm {
 
 
     @Enumerated(EnumType.STRING)
-    private finalStatus status;
+    private FinalStatus status;
     @Lob @Basic(fetch = FetchType.EAGER)
     @Column( nullable = false,columnDefinition = "LONGBLOB")
     private byte[] formPDF;
