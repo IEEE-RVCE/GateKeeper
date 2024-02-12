@@ -1,6 +1,6 @@
 package org.ieeervce.gatekeeper.repository;
 
-import org.ieeervce.gatekeeper.Entity.User;
+import org.ieeervce.gatekeeper.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

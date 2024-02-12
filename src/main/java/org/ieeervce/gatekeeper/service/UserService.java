@@ -3,7 +3,7 @@ package org.ieeervce.gatekeeper.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
-import org.ieeervce.gatekeeper.Entity.User;
+import org.ieeervce.gatekeeper.entity.User;
 
 import java.util.*;
 

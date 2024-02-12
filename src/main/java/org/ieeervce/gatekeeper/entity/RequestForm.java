@@ -1,11 +1,10 @@
-package org.ieeervce.gatekeeper.Entity;
-import jakarta.persistence.*;
+package org.ieeervce.gatekeeper.entity;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-
 public class RequestForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

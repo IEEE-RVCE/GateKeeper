@@ -1,4 +1,4 @@
-package org.ieeervce.gatekeeper.Entity;
+package org.ieeervce.gatekeeper.entity;
 
 public enum FinalStatus {
     ACCEPTED,
