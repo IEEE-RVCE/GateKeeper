@@ -7,7 +7,7 @@ public class ReviewLog {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int id;
+    private Long id;
     @Column(nullable = false)
     private int userId;
 

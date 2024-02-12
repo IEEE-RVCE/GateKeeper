@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
 import org.ieeervce.gatekeeper.Entity.User;
@@ -8,6 +9,7 @@ import java.util.*;
 
 @Service
 public class UserService {
+    @Autowired
     private UserRepository repository;
 
     public User saveUser(User user) {
@@ -21,9 +23,11 @@ public class UserService {
     {
         return repository.findByEmail(email);
     }
-    public User getUserByName(String name)
+    public  User getUserByName(String name)
     {
         return repository.findByName(name);
     }
+
+
 
 }

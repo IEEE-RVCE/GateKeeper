@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Society {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private Integer societyId;
 
     @Column(nullable = false)
     private String name;

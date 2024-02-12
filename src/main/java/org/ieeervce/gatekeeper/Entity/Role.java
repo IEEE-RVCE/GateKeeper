@@ -6,7 +6,7 @@ public class Role {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int ID;
+    private Integer id;
 
     @Column(unique = true,nullable = false)
     private int value;

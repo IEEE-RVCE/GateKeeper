@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
@@ -26,7 +26,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "society", referencedColumnName = "name",nullable = true)
+    @JoinColumn(name = "society", referencedColumnName = "societyId",nullable = true)
     private Society society;
 
 
@@ -40,5 +40,39 @@ public class User {
     @Column(nullable = false)
     private  boolean enabled;
 
+    public Long getUserId() {
+        return userId;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public Society getSociety() {
+        return society;
+    }
+
+    public long getNumber() {
+        return number;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 }
