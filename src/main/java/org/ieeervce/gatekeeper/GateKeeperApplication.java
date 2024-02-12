@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class GateKeeperApplication {
-	@GetMapping("")
-	String helloWorld(){
-		return "hello";
-	}
 
+	@GetMapping("/")
+	String index(){
+		return "works";
+	}
+	@GetMapping("/login")
+	String login(){
+		return "no";
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(GateKeeperApplication.class, args);
 	}
