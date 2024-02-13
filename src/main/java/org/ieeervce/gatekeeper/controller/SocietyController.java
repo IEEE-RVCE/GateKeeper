@@ -5,6 +5,7 @@ import org.ieeervce.gatekeeper.dto.SocietyDTO;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.service.SocietyService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class SocietyController {
     private final SocietyService societyService;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public SocietyController(SocietyService societyService, ModelMapper modelMapper) {
         this.societyService = societyService;
         this.modelMapper = modelMapper;
