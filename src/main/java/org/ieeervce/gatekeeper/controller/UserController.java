@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.ieeervce.gatekeeper.service.UserService;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService service;
@@ -16,7 +18,7 @@ public class UserController {
         return service.saveUser(user);
     }
     @GetMapping("/{email}")
-    public User getUserByEmail(@PathVariable String email) {
+    public Optional<User> getUserByEmail(@PathVariable String email) {
         return service.getUserByEmail(email);
 
     }

@@ -1,6 +1,8 @@
 package org.ieeervce.gatekeeper.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,7 +32,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private  long number;
-
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime dateTime;
 

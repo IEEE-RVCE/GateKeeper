@@ -9,8 +9,12 @@ import java.util.*;
 
 @Service
 public class UserService {
+
+    private final UserRepository repository;
     @Autowired
-    private UserRepository repository;
+    public UserService(UserRepository repository){
+        this.repository= repository;
+    }
 
     public User saveUser(User user) {
         return repository.save(user);
@@ -19,7 +23,7 @@ public class UserService {
     {
         return  repository.saveAll(users);
     }
-    public User getUserByEmail(String email)
+    public Optional<User> getUserByEmail(String email)
     {
         return repository.findByEmail(email);
     }
