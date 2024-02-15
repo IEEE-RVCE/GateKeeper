@@ -17,10 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -37,7 +33,9 @@ public class SecurityConfiguration {
         customizer
                 .requestMatchers(HttpMethod.GET, "/register").permitAll()
                 .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                .requestMatchers(HttpMethod.POST,"/society").permitAll().anyRequest().permitAll();
+                .requestMatchers(HttpMethod.POST,"/society").permitAll()
+                .requestMatchers(HttpMethod.POST,"/user").permitAll()
+                .anyRequest().permitAll();
     }
 
 }

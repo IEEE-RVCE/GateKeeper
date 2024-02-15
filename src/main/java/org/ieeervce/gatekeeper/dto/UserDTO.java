@@ -13,14 +13,25 @@ public class UserDTO {
 
     private Long number;
     private boolean enabled;
-    private LocalDateTime dateTime;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isEnabled() {

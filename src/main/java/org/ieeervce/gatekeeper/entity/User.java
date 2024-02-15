@@ -2,6 +2,7 @@ package org.ieeervce.gatekeeper.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +37,11 @@ public class User {
     private  long number;
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime dateTime;
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
 
     @Column(nullable = false)
@@ -55,8 +60,8 @@ public class User {
         this.enabled = enabled;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setPassword(String password) {
@@ -91,12 +96,20 @@ public class User {
         return society;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public long getNumber() {
         return number;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public boolean isEnabled() {

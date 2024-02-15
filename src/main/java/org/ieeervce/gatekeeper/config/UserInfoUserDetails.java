@@ -10,10 +10,13 @@ import java.util.List;
 
 
 public class UserInfoUserDetails implements UserDetails {
+    /**
+     *  implementation of UserDetails interface by spring security and mapping the data members to the user info
+     */
     private  String userEmail;
     private  String password;
     private  boolean isEnabled;
-//     private List<GrantedAuthority> authorities;
+    private List<GrantedAuthority> authorities;
 
     public UserInfoUserDetails(User userInfo){
         userEmail = userInfo.getEmail();
