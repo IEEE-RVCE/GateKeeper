@@ -36,10 +36,8 @@ public class SecurityConfiguration {
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
                 .requestMatchers(HttpMethod.GET, "/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "/register").permitAll();
-//                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-//                .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
-//                .anyRequest().permitAll();
+                .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                .requestMatchers(HttpMethod.POST,"/society").permitAll().anyRequest().permitAll();
     }
 
 }

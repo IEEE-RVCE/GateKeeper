@@ -17,8 +17,10 @@ public class User {
     @Column(unique = true,nullable = false)
     private String email;
 
+
     @Column(nullable = false)
     private String password;
+
 
 
     @ManyToOne
@@ -39,6 +41,31 @@ public class User {
 
     @Column(nullable = false)
     private  boolean enabled;
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    public void setNumber(long number) {
+        this.number = number;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Long getUserId() {
         return userId;

@@ -4,7 +4,9 @@ import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RoleService {
     private static final String ITEM_NOT_FOUND="Role ID Not Found";
     private final RoleRepository roleRepository;

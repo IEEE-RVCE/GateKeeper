@@ -1,6 +1,7 @@
 package org.ieeervce.gatekeeper.dto;
 
 
+import java.time.LocalDateTime;
 
 public class UserDTO {
     private String name;
@@ -12,6 +13,15 @@ public class UserDTO {
 
     private Long number;
     private boolean enabled;
+    private LocalDateTime dateTime;
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
     public boolean isEnabled() {
         return enabled;
