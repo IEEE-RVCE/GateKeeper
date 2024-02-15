@@ -75,4 +75,11 @@ public class User {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public void setSociety(Society society){
+        this.society=society;
+    }
+    public void setRole(Role role){
+        this.role= role;
+    }
 }

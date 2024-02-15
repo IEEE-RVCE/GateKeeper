@@ -10,9 +10,9 @@ import java.util.List;
 
 
 public class UserInfoUserDetails implements UserDetails {
-    private String userEmail;
-    private String password;
-    private boolean isEnabled;
+    private  String userEmail;
+    private  String password;
+    private  boolean isEnabled;
 //     private List<GrantedAuthority> authorities;
 
     public UserInfoUserDetails(User userInfo){

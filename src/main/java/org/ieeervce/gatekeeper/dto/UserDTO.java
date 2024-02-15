@@ -8,7 +8,7 @@ public class UserDTO {
 
     private String password;
     private Integer societyId;
-    private String roleName;
+    private Integer roleId;
 
     private Long number;
     private boolean enabled;
@@ -47,12 +47,12 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public Integer getSocietyId() {
