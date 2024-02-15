@@ -4,6 +4,7 @@ This software aims to streamline and enhance the event permission approval proce
 ## Current Heirarchy
 
 ![Team Design Plan](https://github.com/IEEE-RVCE/GateKeeper/assets/72200790/2f91868f-dd66-4726-8088-2779109d4e75)
+![Databse Diagram](https://github.com/IEEE-RVCE/GateKeeper/assets/135870585/37693b01-6ef3-4b15-9bc0-218a64946ce7)
 
 ## Running
 
