@@ -1,5 +1,6 @@
-package org.ieeervce.gatekeeper.config;
+package org.ieeervce.gatekeeper.service;
 
+import org.ieeervce.gatekeeper.config.UserInfoUserDetails;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
