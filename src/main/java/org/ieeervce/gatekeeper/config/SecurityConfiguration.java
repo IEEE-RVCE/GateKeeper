@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,7 +23,10 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService() {
         return new UserInfoUserDetailsService();
     }
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults()).authorizeHttpRequests(SecurityConfiguration::getCustomizedHttpAuthorization).csrf(AbstractHttpConfigurer::disable)
@@ -29,10 +35,12 @@ public class SecurityConfiguration {
     }
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
-                .requestMatchers(HttpMethod.GET, "/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                .requestMatchers(HttpMethod.POST,"/society").permitAll()
+                .requestMatchers(HttpMethod.POST,"/society").authenticated()
                 .requestMatchers(HttpMethod.POST,"/user").permitAll()
+                .requestMatchers(HttpMethod.POST,"/role").authenticated()
+                .requestMatchers(HttpMethod.GET,"/role/**").authenticated()
+                .requestMatchers(HttpMethod.PUT,"/role/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE,"/role/**").authenticated()
                 .anyRequest().permitAll();
     }
 

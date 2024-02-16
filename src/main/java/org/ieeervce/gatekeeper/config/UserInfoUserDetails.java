@@ -12,14 +12,13 @@ import java.util.List;
  * implementation of UserDetails interface by spring security and mapping the data members to the user info
  */
 public class UserInfoUserDetails implements UserDetails {
-
-    private  String userEmail;
+    private  String userName;
     private  String password;
     private  boolean isEnabled;
     private List<GrantedAuthority> authorities;
 
     public UserInfoUserDetails(User userInfo){
-        userEmail = userInfo.getEmail();
+        userName = userInfo.getEmail();
         password = userInfo.getPassword();
         isEnabled = userInfo.isEnabled();
     }
@@ -36,7 +35,7 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userEmail;
+        return userName;
     }
 
     @Override
