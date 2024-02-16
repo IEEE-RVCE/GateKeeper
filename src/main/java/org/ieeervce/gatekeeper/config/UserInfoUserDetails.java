@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 
-
+/**
+ * implementation of UserDetails interface by spring security and mapping the data members to the user info
+ */
 public class UserInfoUserDetails implements UserDetails {
-    /**
-     *  implementation of UserDetails interface by spring security and mapping the data members to the user info
-     */
+
     private  String userEmail;
     private  String password;
     private  boolean isEnabled;
