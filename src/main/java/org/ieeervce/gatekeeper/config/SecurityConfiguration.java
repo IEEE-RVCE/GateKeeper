@@ -35,12 +35,13 @@ public class SecurityConfiguration {
     }
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
-                .requestMatchers(HttpMethod.POST,"/society").authenticated()
                 .requestMatchers(HttpMethod.POST,"/user").permitAll()
-                .requestMatchers(HttpMethod.POST,"/role").authenticated()
-                .requestMatchers(HttpMethod.GET,"/role/**").authenticated()
-                .requestMatchers(HttpMethod.PUT,"/role/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE,"/role/**").authenticated()
+                .requestMatchers(HttpMethod.POST,"/role").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/role/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/role/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/society").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/society/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/society/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
     }
 
