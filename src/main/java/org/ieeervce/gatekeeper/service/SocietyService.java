@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Create/Read/Update/Delete Societieshttps://meet.google.com/ggs-tdap-sib
+ * Create/Read/Update/Delete Societies
  */
 @Service
 public class SocietyService {

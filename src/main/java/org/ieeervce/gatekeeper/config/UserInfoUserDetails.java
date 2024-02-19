@@ -15,31 +15,28 @@ import java.util.stream.Collectors;
  * implementation of UserDetails interface by spring security and mapping the data members to the user info
  */
 public class UserInfoUserDetails implements UserDetails {
-    private  String userName;
-    private  String password;
-    private  boolean isEnabled;
-    private List<GrantedAuthority> authorities;
+    private final User userInfo;
 
     public UserInfoUserDetails(User userInfo){
-        userName = userInfo.getEmail();
-        password = userInfo.getPassword();
-        isEnabled = userInfo.isEnabled();
-        authorities = Arrays.stream((userInfo.getRole()).getRoleName().split(",")).map(role->new SimpleGrantedAuthority("ROLE_"+role)).collect(Collectors.toList());
+        this.userInfo = userInfo;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities;
+        authorities = Arrays.stream((userInfo.getRole()).getRoleName().split(",")).map(role->new SimpleGrantedAuthority("ROLE_"+role)).collect(Collectors.toList());
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return password;
+
+        return userInfo.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return userInfo.getEmail();
     }
 
     @Override
@@ -59,6 +56,6 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return userInfo.isEnabled();
     }
 }

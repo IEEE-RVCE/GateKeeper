@@ -6,8 +6,7 @@ import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +22,9 @@ public class RoleService {
     }
     public Role add(Role role){
         return roleRepository.save(role);
+    }
+    public List<Role> getAllRoles(){
+        return roleRepository.findAll();
     }
     @Transactional
     public Role edit (Integer roleId, Role editedRole) throws ItemNotFoundException{
