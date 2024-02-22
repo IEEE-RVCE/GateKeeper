@@ -11,6 +11,7 @@ import org.ieeervce.gatekeeper.service.SocietyService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.ieeervce.gatekeeper.service.UserService;
 
@@ -29,12 +30,15 @@ public class UserController {
             skip().setUserId(null);
         }
     };
+
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper,SocietyService societyService,RoleService roleService) {
+    public UserController(UserService userService, ModelMapper modelMapper,SocietyService societyService,RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.societyService = societyService;
         this.roleService= roleService;
+        this.passwordEncoder = passwordEncoder;
         this.modelMapper.addMappings(skipReferencedFieldsMap);
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true);
     }
@@ -42,7 +46,7 @@ public class UserController {
     @PostMapping
     User addUser(@RequestBody UserDTO userDTO) throws InvalidDataException {
         User user = modelMapper.map(userDTO,User.class);
-
+             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             try {
                 if(userDTO.getSocietyId()!=null) {
                     Society society = societyService.findOne(userDTO.getSocietyId());
