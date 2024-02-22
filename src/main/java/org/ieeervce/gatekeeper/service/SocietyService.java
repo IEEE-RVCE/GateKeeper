@@ -29,7 +29,7 @@ public class SocietyService {
     public Society add(Society society){
         return societyRepository.save(society);
     }
-    public Society findOne(int societyId) throws ItemNotFoundException {
+    public Society findOne(Integer societyId) throws ItemNotFoundException {
         return societyRepository.findById(societyId).orElseThrow(()->new ItemNotFoundException(SOCIETY_ID_NOT_FOUND + societyId));
     }
     @Transactional

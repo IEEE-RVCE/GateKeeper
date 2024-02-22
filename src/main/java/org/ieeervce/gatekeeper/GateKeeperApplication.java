@@ -13,10 +13,7 @@ public class GateKeeperApplication {
 	String index(){
 		return "works";
 	}
-	@GetMapping("/login")
-	String login(){
-		return "no";
-	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(GateKeeperApplication.class, args);
 	}
