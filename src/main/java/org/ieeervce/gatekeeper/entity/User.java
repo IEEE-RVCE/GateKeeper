@@ -43,7 +43,8 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-
+    @Column(nullable = false)
+    private boolean unsubscribed;
     @Column(nullable = false)
     private  boolean enabled;
     public void setName(String name) {
@@ -114,6 +115,14 @@ public class User {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public boolean isUnsubscribed() {
+        return unsubscribed;
+    }
+
+    public void setUnsubscribed(boolean unsubscribed) {
+        this.unsubscribed = unsubscribed;
     }
 
     public void setSociety(Society society){

@@ -13,6 +13,7 @@ public class UserDTO {
 
     private Long number;
     private boolean enabled;
+    private boolean unsubscribed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -91,6 +92,11 @@ public class UserDTO {
         this.name = name;
     }
 
+    public boolean isUnsubscribed() {
+        return unsubscribed;
+    }
 
-
+    public void setUnsubscribed(boolean unsubscribed) {
+        this.unsubscribed = unsubscribed;
+    }
 }
