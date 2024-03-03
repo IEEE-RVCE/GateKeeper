@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.service;
 
+import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
@@ -9,6 +10,7 @@ import java.util.*;
 
 @Service
 public class UserService {
+    private final String ITEM_NOT_FOUND = "User Id not found";
 
     private final UserRepository repository;
     @Autowired
@@ -31,7 +33,9 @@ public class UserService {
     {
         return repository.findByName(name);
     }
-
+    public User getUserById(Integer userId) throws ItemNotFoundException {
+        return repository.findById(userId).orElseThrow(()-> new ItemNotFoundException(ITEM_NOT_FOUND+userId));
+    }
 
 
 }

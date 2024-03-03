@@ -41,7 +41,8 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST,"/society").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/society/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/society/**").hasRole("ADMIN")
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
+
     }
 
 }
