@@ -1,6 +1,7 @@
 package org.ieeervce.gatekeeper.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,8 +17,10 @@ public class RequestForm {
     @Column(nullable = false)
     private String eventTitle;
 
-    @Column(nullable = false, columnDefinition = "integer default 0")
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private int formValue;
+
 
     @ManyToOne
     @JoinColumn(name = "requester",referencedColumnName = "userId")
@@ -30,11 +33,39 @@ public class RequestForm {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+
     @Enumerated(EnumType.STRING)
     private FinalStatus status;
     @Lob @Basic(fetch = FetchType.EAGER)
     @Column( nullable = false,columnDefinition = "LONGBLOB")
     private byte[] formPDF;
+
+    @ManyToMany
+    @JoinTable(
+            name = "request_form_roles",
+            joinColumns = @JoinColumn(name = "request_form_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> requestHierarchy;
+
+    public List<Role> getRequestHierarchy() {
+        return requestHierarchy;
+    }
+
+    public void setRequestHierarchy(List<Role> requestHierarchy) {
+        this.requestHierarchy = requestHierarchy;
+    }
+
+    @Column(nullable = false)
+    int requestIndex;
+
+    public int getRequestIndex() {
+        return requestIndex;
+    }
+
+    public void setRequestIndex(int requestIndex) {
+        this.requestIndex = requestIndex;
+    }
 
     @OneToMany(mappedBy = "formId", cascade = CascadeType.ALL)
     private List<ReviewLog> reviewLogs;
