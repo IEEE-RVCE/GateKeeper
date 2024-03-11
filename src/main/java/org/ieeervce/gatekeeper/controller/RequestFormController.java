@@ -68,7 +68,7 @@ public class RequestFormController {
             requestForm.setRequester(optionalUser);
 
 
-            requestForm.setRequestHierarchy(generateHierarchy(optionalUser,isFinance));
+            requestForm.setRequestHierarchy(roleService.generateHierarchy(optionalUser,isFinance));
 
         } catch (Exception e) {
 
@@ -94,24 +94,5 @@ public class RequestFormController {
 
         return requestFormService.edit(requestFormId, editedRequestForm);
     }
-    public List<Role> generateHierarchy(User u,boolean isFinance)
-    {
-        List<Role> rs=roleService.getAllRoles();
-        int val=u.getRole().getValue();
 
-       // int soc=u.getSociety().getSocietyId();
-        rs.remove(5);
-        if(!isFinance)
-        {
-            rs.remove(3);
-        }
-        if(val==1)
-        {
-            rs.remove(2);
-            rs.remove(0);
-            rs.remove(0);
-
-        }
-        return rs;
-    }
 }
