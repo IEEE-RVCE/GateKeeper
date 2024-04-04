@@ -134,6 +134,7 @@ public class User {
         this.unsubscribed = unsubscribed;
     }
 
+
     public List<RequestForm> getPendingRequests() {
         return pendingRequests;
     }
@@ -141,6 +142,7 @@ public class User {
     public void setPendingRequests(List<RequestForm> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
+
 
     public void setSociety(Society society){
         this.society=society;
