@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class User {
@@ -47,6 +48,14 @@ public class User {
     private boolean unsubscribed;
     @Column(nullable = false)
     private  boolean enabled;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pendingRequests",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "formId")
+    )
+    private List<RequestForm> pendingRequests;
     public void setName(String name) {
         this.name = name;
     }
@@ -123,6 +132,14 @@ public class User {
 
     public void setUnsubscribed(boolean unsubscribed) {
         this.unsubscribed = unsubscribed;
+    }
+
+    public List<RequestForm> getPendingRequests() {
+        return pendingRequests;
+    }
+
+    public void setPendingRequests(List<RequestForm> pendingRequests) {
+        this.pendingRequests = pendingRequests;
     }
 
     public void setSociety(Society society){

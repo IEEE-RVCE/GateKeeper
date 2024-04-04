@@ -1,6 +1,8 @@
 package org.ieeervce.gatekeeper.service;
 
 import org.ieeervce.gatekeeper.ItemNotFoundException;
+import org.ieeervce.gatekeeper.entity.Role;
+import org.ieeervce.gatekeeper.entity.Society;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
@@ -35,6 +37,10 @@ public class UserService {
     }
     public User getUserById(Integer userId) throws ItemNotFoundException {
         return repository.findById(userId).orElseThrow(()-> new ItemNotFoundException(ITEM_NOT_FOUND+userId));
+    }
+    public List<User> getUsersByRoleAndSociety(Role role, Society society)
+    {
+        return repository.findByRoleAndSociety(role,society);
     }
 
 

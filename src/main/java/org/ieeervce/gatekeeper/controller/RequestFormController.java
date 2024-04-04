@@ -6,6 +6,7 @@ import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.ieeervce.gatekeeper.PDFNotConversionException;
 import org.ieeervce.gatekeeper.dto.RequestDTO;
 import org.ieeervce.gatekeeper.entity.*;
+
 import org.ieeervce.gatekeeper.service.RequestFormService;
 import org.ieeervce.gatekeeper.service.RoleService;
 import org.ieeervce.gatekeeper.service.UserService;
@@ -42,7 +43,12 @@ public class RequestFormController {
     public List<RequestForm> getAll(){
         return requestFormService.list();
     }
-    
+
+    @GetMapping("/byRequester")
+    public List<RequestForm> getByUser()
+    {
+        return requestFormService.getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
+    }
     @GetMapping("/{requestFormId}")
     public RequestForm getOne(@PathVariable Long requestFormId) throws ItemNotFoundException {
         return requestFormService.findOne(requestFormId);
@@ -84,6 +90,7 @@ public class RequestFormController {
         } catch (java.io.IOException e){
             throw new PDFNotConversionException("Could not store pdf");
         }
+      // Role rl=requestForm.getRequestHierarchy().get(requestForm.getRequestIndex());
 
         return requestFormService.save(requestForm);
     }

@@ -1,8 +1,14 @@
 package org.ieeervce.gatekeeper.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.RequestForm;
+import org.ieeervce.gatekeeper.entity.Role;
+import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.RequestFormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,4 +50,12 @@ public RequestForm add(RequestForm requestForm){
         return requestFormRepository.save(editedRequestForm);
      }).orElseThrow(()-> new ItemNotFoundException(ITEM_NOT_FOUND+requestFormId));
  }
+ public List<RequestForm> getRequestFormByRequester(User user)
+ {
+     return requestFormRepository.findByRequester(user);
+ }
+
+
+
+
 }
