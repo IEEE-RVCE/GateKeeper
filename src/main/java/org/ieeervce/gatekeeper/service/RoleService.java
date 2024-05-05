@@ -51,7 +51,6 @@ public class RoleService {
         List<Role> rs=getAllRolesOrderedByValue();
         int val=u.getRole().getValue();
 
-        // int soc=u.getSociety().getSocietyId();
         rs.remove(roleValue.Admin.getValue());
         if(!isFinance)
         {
@@ -67,7 +66,7 @@ public class RoleService {
         }
         else
         {
-            rs.remove(roleValue.SocietyExecom);
+            rs.remove(roleValue.SocietyExecom.getValue());
         }
         return rs;
     }

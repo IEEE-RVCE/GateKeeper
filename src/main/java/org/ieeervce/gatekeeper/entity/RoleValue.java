@@ -5,9 +5,10 @@ public enum RoleValue {
     MainExecom(1),
     FacultyAdvisor(2),
     FinanceHead(3),
+    BranchCounsellor(4),
     Admin(5);
 
-    private final int value;
+    private int value;
 
     RoleValue(int value) {
         this.value = value;

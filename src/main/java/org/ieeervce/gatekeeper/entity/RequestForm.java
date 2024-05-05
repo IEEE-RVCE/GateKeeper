@@ -49,20 +49,6 @@ public class RequestForm {
     private List<Role> requestHierarchy;
 
 
-
-
-    @ManyToMany
-    @JoinTable(
-            name = "request_form_roles",
-            joinColumns = @JoinColumn(name = "request_form_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<User> approverDetails;
-
-
-
-
-
     public List<Role> getRequestHierarchy() {
         return requestHierarchy;
     }
@@ -95,7 +81,6 @@ public class RequestForm {
     public void setFinance(boolean finance) {
         isFinance = finance;
     }
-
 
     public Long getId() {
         return id;
@@ -169,16 +154,6 @@ public class RequestForm {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
-    public List<User> getApproverDetails() {
-        return approverDetails;
-    }
-
-    public void setApproverDetails(List<User> approverDetails) {
-        this.approverDetails = approverDetails;
-    }
-
 
 
 

@@ -52,8 +52,8 @@ public class UserService {
     public void setPendingRequests(RequestForm requestForm, List<Role> requestHierarchy, int requestIndex, User user) {
         Role role=requestHierarchy.get(requestIndex);
 
-        List<User> users=new ArrayList<>();
-        if(role.getValue()!=roleValue.FacultyAdvisor.getValue())
+        List<User> users;
+        if(role.getValue()!= RoleValue.FacultyAdvisor.getValue())
         {
             users=getUsersByRole(role);
         }
@@ -64,6 +64,31 @@ public class UserService {
         for(User u:users)
         {
             u.getPendingRequests().add(requestForm);
+        }
+    }
+    public void removePendingRequests(RequestForm requestForm, List<Role> requestHierarchy, int requestIndex, User user,StatusEnum statusEnum) {
+        Role role=requestHierarchy.get(requestIndex);
+
+        List<User> users;
+        if(role.getValue()!= RoleValue.FacultyAdvisor.getValue())
+        {
+            users=getUsersByRole(role);
+        }
+        else
+        {
+            users=getUsersByRoleAndSociety(role, user.getSociety());
+        }
+        for(User u:users)
+        {
+            u.getPendingRequests().remove(requestForm);
+            if(statusEnum.equals(StatusEnum.ACCEPTED))
+            {
+                u.getApprovedRequests().add(requestForm);
+            }
+            else
+            {
+                u.getRejectedRequests().add(requestForm);
+            }
         }
     }
 }
