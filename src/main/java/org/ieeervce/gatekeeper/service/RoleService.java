@@ -3,6 +3,7 @@ package org.ieeervce.gatekeeper.service;
 import jakarta.transaction.Transactional;
 import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.Role;
+import org.ieeervce.gatekeeper.entity.RoleValue;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,8 @@ import java.util.Optional;
 
 @Service
 public class RoleService {
-    public static final int SocietyExecom=0;
-    public static final int MainExecom=1;
-    public static final int FacultyAdvisor=2;
-    public static final int Admin=5;
-    public static final int FinanceHead=3;
+
+    private RoleValue roleValue;
     private static final String ITEM_NOT_FOUND="Role ID Not Found";
     private final RoleRepository roleRepository;
     @Autowired
@@ -54,22 +52,22 @@ public class RoleService {
         int val=u.getRole().getValue();
 
         // int soc=u.getSociety().getSocietyId();
-        rs.remove(Admin);
+        rs.remove(roleValue.Admin.getValue());
         if(!isFinance)
         {
-            rs.remove(FinanceHead);
+            rs.remove(roleValue.FinanceHead.getValue());
         }
-        if(val==MainExecom)
+        if(val==roleValue.MainExecom.getValue())
         {
-            rs.remove(FacultyAdvisor);
-            rs.remove(MainExecom);
-            rs.remove(SocietyExecom);
+            rs.remove(roleValue.FacultyAdvisor.getValue());
+            rs.remove(roleValue.MainExecom.getValue());
+            rs.remove(roleValue.SocietyExecom.getValue());
 
 
         }
         else
         {
-            rs.remove(SocietyExecom);
+            rs.remove(roleValue.SocietyExecom);
         }
         return rs;
     }

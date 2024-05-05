@@ -25,6 +25,8 @@ import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterD
 
 @RestController
 @RequestMapping("/requestForm")
+@CrossOrigin("http://localhost:3000")
+
 public class RequestFormController {
 
     private final ModelMapper modelMapper;
@@ -76,6 +78,7 @@ public class RequestFormController {
 
             requestForm.setRequestHierarchy(roleService.generateHierarchy(optionalUser,isFinance));
 
+            userService.setPendingRequests(requestForm,requestForm.getRequestHierarchy(),requestForm.getRequestIndex(),optionalUser);
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -83,14 +86,11 @@ public class RequestFormController {
 
         try {
              requestForm.setFormPDF(formPDF.getBytes());
-//            if (requesterUserId != null) {
-//                User user = userService.getUserById(requesterUserId);
-//                requestForm.setRequester(user);
-//            }
+
         } catch (java.io.IOException e){
             throw new PDFNotConversionException("Could not store pdf");
         }
-      // Role rl=requestForm.getRequestHierarchy().get(requestForm.getRequestIndex());
+
 
         return requestFormService.save(requestForm);
     }

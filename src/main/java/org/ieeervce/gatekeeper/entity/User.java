@@ -56,6 +56,21 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
     private List<RequestForm> pendingRequests;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pendingRequests",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "formId")
+    )
+    private List<RequestForm> approvedRequests;
+    @ManyToMany
+    @JoinTable(
+            name = "pendingRequests",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "formId")
+    )
+    private List<RequestForm> rejectedRequests;
     public void setName(String name) {
         this.name = name;
     }
@@ -116,6 +131,22 @@ public class User {
 
     public long getNumber() {
         return number;
+    }
+
+    public List<RequestForm> getApprovedRequests() {
+        return approvedRequests;
+    }
+
+    public void setApprovedRequests(List<RequestForm> approvedRequests) {
+        this.approvedRequests = approvedRequests;
+    }
+
+    public List<RequestForm> getRejectedRequests() {
+        return rejectedRequests;
+    }
+
+    public void setRejectedRequests(List<RequestForm> rejectedRequests) {
+        this.rejectedRequests = rejectedRequests;
     }
 
     public LocalDateTime getCreatedAt() {

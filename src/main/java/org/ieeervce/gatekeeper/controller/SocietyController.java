@@ -12,6 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/society")
+@CrossOrigin("http://localhost:3000")
+
 public class SocietyController {
     private final SocietyService societyService;
     private final ModelMapper modelMapper;
