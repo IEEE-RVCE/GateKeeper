@@ -173,6 +173,7 @@ public class User {
         this.pendingRequests = pendingRequests;
     }
 
+
     public void setSociety(Society society){
         this.society=society;
     }
