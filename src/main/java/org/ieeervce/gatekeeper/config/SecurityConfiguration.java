@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.config;
 
+import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.service.UserInfoUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebSecurity
@@ -34,14 +39,21 @@ public class SecurityConfiguration {
     }
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
-                .requestMatchers(HttpMethod.POST,"/user").permitAll()
-                .requestMatchers(HttpMethod.POST,"/role").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT,"/role/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE,"/role/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST,"/society").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT,"/society/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE,"/society/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.POST,"/user").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.POST,"/role").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.PUT,"/role/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.DELETE,"/role/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.POST,"/society").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.PUT,"/society/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.DELETE,"/society/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
+
     }
 
+
+public static String getRequesterDetails()
+{
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return authentication.getName();
+}
 }

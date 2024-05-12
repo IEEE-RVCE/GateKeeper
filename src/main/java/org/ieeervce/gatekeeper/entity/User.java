@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class User {
@@ -47,6 +48,29 @@ public class User {
     private boolean unsubscribed;
     @Column(nullable = false)
     private  boolean enabled;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pendingRequests",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "formId")
+    )
+    private List<RequestForm> pendingRequests;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pendingRequests",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "formId")
+    )
+    private List<RequestForm> approvedRequests;
+    @ManyToMany
+    @JoinTable(
+            name = "pendingRequests",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "formId")
+    )
+    private List<RequestForm> rejectedRequests;
     public void setName(String name) {
         this.name = name;
     }
@@ -109,6 +133,22 @@ public class User {
         return number;
     }
 
+    public List<RequestForm> getApprovedRequests() {
+        return approvedRequests;
+    }
+
+    public void setApprovedRequests(List<RequestForm> approvedRequests) {
+        this.approvedRequests = approvedRequests;
+    }
+
+    public List<RequestForm> getRejectedRequests() {
+        return rejectedRequests;
+    }
+
+    public void setRejectedRequests(List<RequestForm> rejectedRequests) {
+        this.rejectedRequests = rejectedRequests;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -124,6 +164,15 @@ public class User {
     public void setUnsubscribed(boolean unsubscribed) {
         this.unsubscribed = unsubscribed;
     }
+
+    public List<RequestForm> getPendingRequests() {
+        return pendingRequests;
+    }
+
+    public void setPendingRequests(List<RequestForm> pendingRequests) {
+        this.pendingRequests = pendingRequests;
+    }
+
 
     public void setSociety(Society society){
         this.society=society;

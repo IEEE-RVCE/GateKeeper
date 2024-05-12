@@ -3,6 +3,7 @@ package org.ieeervce.gatekeeper.controller;
 import org.ieeervce.gatekeeper.InvalidDataException;
 import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.ieeervce.gatekeeper.dto.UserDTO;
+import org.ieeervce.gatekeeper.entity.RequestForm;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.entity.User;
@@ -15,10 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.ieeervce.gatekeeper.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -66,7 +69,9 @@ public class UserController {
 
     @GetMapping("/{email}")
     public Optional<User> getUserByEmail(@PathVariable String email) {
+        System.out.println(userService.getUserByEmail(email).get().getPendingRequests());
         return userService.getUserByEmail(email);
 
     }
+
 }

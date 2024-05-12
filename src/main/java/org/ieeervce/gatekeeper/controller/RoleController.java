@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/role")
+@CrossOrigin("http://localhost:3000")
 public class RoleController {
     private final RoleService roleService;
     private final ModelMapper modelMapper;
@@ -48,4 +49,5 @@ public class RoleController {
     public void delete(@PathVariable Integer roleId) throws ItemNotFoundException{
         roleService.delete(roleId);
     }
+
 }
