@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -55,21 +56,24 @@ public class User {
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
+
     private List<RequestForm> pendingRequests;
 
     @ManyToMany
     @JoinTable(
-            name = "pendingRequests",
+            name = "approvedRequests",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
+
     private List<RequestForm> approvedRequests;
     @ManyToMany
     @JoinTable(
-            name = "pendingRequests",
+            name = "rejectedRequests",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
+
     private List<RequestForm> rejectedRequests;
     public void setName(String name) {
         this.name = name;

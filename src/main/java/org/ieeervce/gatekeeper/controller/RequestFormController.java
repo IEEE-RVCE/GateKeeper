@@ -5,6 +5,7 @@ import org.ieeervce.gatekeeper.InvalidDataException;
 import org.ieeervce.gatekeeper.ItemNotFoundException;
 import org.ieeervce.gatekeeper.PDFNotConversionException;
 import org.ieeervce.gatekeeper.dto.RequestDTO;
+import org.ieeervce.gatekeeper.dto.RequestFormPdfDTO;
 import org.ieeervce.gatekeeper.dto.ResponseRequestFormDTO;
 import org.ieeervce.gatekeeper.dto.UserDTO;
 import org.ieeervce.gatekeeper.entity.*;
@@ -34,6 +35,7 @@ import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterD
 public class RequestFormController {
 
     private final ModelMapper modelMapper;
+
     private final RequestFormService requestFormService;
 
     private final RoleService roleService;
@@ -53,6 +55,8 @@ public class RequestFormController {
         this.reviewLogService=reviewLogService;
         this.modelMapper.addMappings(skipReferencedFieldsMap);
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+
     }
 
     @GetMapping
@@ -66,8 +70,9 @@ public class RequestFormController {
         return requestFormService.getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
     }
     @GetMapping("/{requestFormId}")
-    public RequestForm getOne(@PathVariable Long requestFormId) throws ItemNotFoundException {
-        return requestFormService.findOne(requestFormId);
+    public ResponseRequestFormDTO getOne(@PathVariable Long requestFormId) throws ItemNotFoundException {
+
+        return modelMapper.map(requestFormService.findOne(requestFormId),ResponseRequestFormDTO.class);
     }
 
     @DeleteMapping("/{requestFormID}")
@@ -129,12 +134,12 @@ public class RequestFormController {
         reviewLog.setStatus(StatusEnum.ACCEPTED);
         reviewLog.setUserId(optionalUser);
         reviewLog.setFormId(requestForm);
-        reviewLogService.addReview(reviewLog);
+         reviewLogService.addReview(reviewLog);
         requestForm.getReviewLogs().add(reviewLog);
         requestForm.setRequestIndex(index+1);
         index++;
         if(index<requestForm.getRequestHierarchy().size())
-        userService.setPendingRequests(requestForm,requestForm.getRequestHierarchy(),index,optionalUser);
+        userService.setPendingRequests(requestForm,requestForm.getRequestHierarchy(),index,requestForm.getRequester());
         else
         {
             requestForm.setStatus(FinalStatus.ACCEPTED);
@@ -163,6 +168,13 @@ public class RequestFormController {
         requestForm.getReviewLogs().add(reviewLog);
         return modelMapper.map(requestFormService.save(requestForm),ResponseRequestFormDTO.class);//truncated
         //TODO update requester with email
+    }
+
+    @GetMapping("/pdf/{requestFormId}")
+    private RequestFormPdfDTO formPdf(@PathVariable Long requestFormId) throws ItemNotFoundException {
+        RequestForm requestForm=requestFormService.findOne(requestFormId);
+        return modelMapper.map(requestForm,RequestFormPdfDTO.class);
+
     }
 
 }

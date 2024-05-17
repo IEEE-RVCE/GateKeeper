@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,9 +11,11 @@ public class ReviewLog {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "userId")
+    @JsonIgnore
     private User userId;
     @ManyToOne
     @JoinColumn(name = "formId",referencedColumnName = "id")
+    @JsonIgnore
     private RequestForm formId;
     @Enumerated(EnumType.STRING)
     private StatusEnum status;

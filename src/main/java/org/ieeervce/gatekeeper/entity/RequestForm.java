@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,8 +37,9 @@ public class RequestForm {
 
     @Enumerated(EnumType.STRING)
     private FinalStatus status;
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob @Basic(fetch = FetchType.LAZY)
     @Column( nullable = false,columnDefinition = "LONGBLOB")
+    @JsonIgnore
     private byte[] formPDF;
 
     @ManyToMany
@@ -68,7 +70,8 @@ public class RequestForm {
         this.requestIndex = requestIndex;
     }
 
-    @OneToMany(mappedBy = "formId", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "formId", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ReviewLog> reviewLogs;
 
     @Column(nullable = false)

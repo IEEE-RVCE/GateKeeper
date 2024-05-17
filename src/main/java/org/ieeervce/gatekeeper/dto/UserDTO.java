@@ -1,7 +1,10 @@
 package org.ieeervce.gatekeeper.dto;
 
 
+import org.ieeervce.gatekeeper.entity.RequestForm;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserDTO {
     private String name;
@@ -16,9 +19,21 @@ public class UserDTO {
     private boolean unsubscribed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<RequestForm> approvedRequests;
+    private List<RequestForm> pendingRequests;
+    private List<RequestForm> rejectedRequests;
+
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<RequestForm> getApprovedRequests() {
+        return approvedRequests;
+    }
+
+    public void setApprovedRequests(List<RequestForm> approvedRequests) {
+        this.approvedRequests = approvedRequests;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
@@ -98,5 +113,21 @@ public class UserDTO {
 
     public void setUnsubscribed(boolean unsubscribed) {
         this.unsubscribed = unsubscribed;
+    }
+
+    public List<RequestForm> getPendingRequests() {
+        return pendingRequests;
+    }
+
+    public void setPendingRequests(List<RequestForm> pendingRequests) {
+        this.pendingRequests = pendingRequests;
+    }
+
+    public List<RequestForm> getRejectedRequests() {
+        return rejectedRequests;
+    }
+
+    public void setRejectedRequests(List<RequestForm> rejectedRequests) {
+        this.rejectedRequests = rejectedRequests;
     }
 }
