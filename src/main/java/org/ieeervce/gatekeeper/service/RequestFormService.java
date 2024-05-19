@@ -11,6 +11,7 @@ import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.RequestFormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,4 +59,7 @@ public RequestForm add(RequestForm requestForm){
  }
 
 
+    public List<RequestForm> getAllRequests() {
+    return requestFormRepository.findAll();
+    }
 }

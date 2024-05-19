@@ -16,9 +16,12 @@ import org.ieeervce.gatekeeper.service.RoleService;
 import org.ieeervce.gatekeeper.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeToken;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 import java.awt.*;
@@ -65,9 +68,11 @@ public class RequestFormController {
     }
 
     @GetMapping("/byRequester")
-    public List<RequestForm> getByUser()
+    public List<RequestFormPdfDTO> getByUser()
     {
-        return requestFormService.getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
+        List<RequestForm> requestFormList=requestFormService.getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
+        Type listType = new TypeToken<List<ResponseRequestFormDTO>>(){}.getType();
+        return modelMapper.map(requestFormList,listType);
     }
     @GetMapping("/{requestFormId}")
     public ResponseRequestFormDTO getOne(@PathVariable Long requestFormId) throws ItemNotFoundException {
@@ -175,6 +180,13 @@ public class RequestFormController {
         RequestForm requestForm=requestFormService.findOne(requestFormId);
         return modelMapper.map(requestForm,RequestFormPdfDTO.class);
 
+    }
+    @GetMapping("/")
+    private List<ResponseRequestFormDTO> getAllRequests()
+    {
+        List<RequestForm> requestFormList=requestFormService.getAllRequests();
+        Type listType = new TypeToken<List<ResponseRequestFormDTO>>(){}.getType();
+        return modelMapper.map(requestFormList,listType);
     }
 
 }
