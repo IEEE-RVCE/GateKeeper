@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
 
+
+
 import java.util.*;
+
 
 @Service
 public class UserService {
@@ -87,7 +90,9 @@ public class UserService {
             }
             else
             {
+
                 u.getRejectedRequests().add(requestForm);
+
             }
         }
     }

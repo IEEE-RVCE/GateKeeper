@@ -7,22 +7,21 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public class RequestDTO {
+    private MultipartFile formPDF ;
     private String eventTitle;
     private Integer requesterUserId;
 
     private boolean isFinance ;
-    private MultipartFile formPDF ;
-
     private List<Role> requestHierarchy;
 
-    private int index;
+    private int requestIndex;
 
-    public int getIndex() {
-        return index;
+    public int getRequestIndex() {
+        return requestIndex;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setRequestIndex(int requestIndex) {
+        this.requestIndex = requestIndex;
     }
 
     public List<Role> getRequestHierarchy() {

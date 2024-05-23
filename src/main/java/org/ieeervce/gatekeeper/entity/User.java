@@ -1,9 +1,10 @@
 package org.ieeervce.gatekeeper.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class User {
 
 
     @Column(nullable = false, unique = true)
-    private  long number;
+    private  BigInteger number;
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -55,21 +56,24 @@ public class User {
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
+
     private List<RequestForm> pendingRequests;
 
     @ManyToMany
     @JoinTable(
-            name = "pendingRequests",
+            name = "approvedRequests",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
+
     private List<RequestForm> approvedRequests;
     @ManyToMany
     @JoinTable(
-            name = "pendingRequests",
+            name = "rejectedRequests",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
+
     private List<RequestForm> rejectedRequests;
     public void setName(String name) {
         this.name = name;
@@ -77,7 +81,7 @@ public class User {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    public void setNumber(long number) {
+    public void setNumber(BigInteger number) {
         this.number = number;
     }
 
@@ -129,7 +133,7 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public long getNumber() {
+    public BigInteger getNumber() {
         return number;
     }
 

@@ -1,53 +1,32 @@
-package org.ieeervce.gatekeeper.entity;
+package org.ieeervce.gatekeeper.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.ieeervce.gatekeeper.entity.FinalStatus;
+import org.ieeervce.gatekeeper.entity.ReviewLog;
+import org.ieeervce.gatekeeper.entity.Role;
+import org.ieeervce.gatekeeper.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-@Entity
-public class RequestForm {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+/*
+DTO for sending truncated response
+RequestDTO inherits from it
+*/
+public class ResponseRequestFormDTO {
     private Long id;
-
-    @Column(nullable = false)
     private String eventTitle;
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
     private int formValue;
 
-
-    @ManyToOne
-    @JoinColumn(name = "requester",referencedColumnName = "userId")
     private User requester;
-    @CreationTimestamp
-    @Column(nullable = false)
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-
-    @Enumerated(EnumType.STRING)
     private FinalStatus status;
-    @Lob @Basic(fetch = FetchType.LAZY)
-    @Column( nullable = false,columnDefinition = "LONGBLOB")
-    @JsonIgnore
     private byte[] formPDF;
-
-    @ManyToMany
-    @JoinTable(
-            name = "request_form_roles",
-            joinColumns = @JoinColumn(name = "request_form_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
     private List<Role> requestHierarchy;
 
 
@@ -58,8 +37,6 @@ public class RequestForm {
     public void setRequestHierarchy(List<Role> requestHierarchy) {
         this.requestHierarchy = requestHierarchy;
     }
-
-    @Column(nullable = false)
     int requestIndex;
 
     public int getRequestIndex() {
@@ -70,11 +47,8 @@ public class RequestForm {
         this.requestIndex = requestIndex;
     }
 
-    @ManyToMany(mappedBy = "formId", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<ReviewLog> reviewLogs;
 
-    @Column(nullable = false)
     private boolean isFinance;
 
     public boolean isFinance() {
@@ -161,3 +135,4 @@ public class RequestForm {
 
 
 }
+

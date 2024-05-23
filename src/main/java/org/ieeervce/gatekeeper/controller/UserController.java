@@ -68,9 +68,15 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    public Optional<User> getUserByEmail(@PathVariable String email) {
-        System.out.println(userService.getUserByEmail(email).get().getPendingRequests());
-        return userService.getUserByEmail(email);
+    public UserDTO getUserByEmail(@PathVariable String email) throws ItemNotFoundException{
+        Optional<User> userOptional = userService.getUserByEmail(email);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            return modelMapper.map(user, UserDTO.class);
+        }
+        else{
+            throw new ItemNotFoundException("User Not Found");
+        }
 
     }
 
