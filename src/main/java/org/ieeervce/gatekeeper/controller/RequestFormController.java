@@ -138,7 +138,9 @@ public class RequestFormController {
         reviewLog.setComments(comment);
         reviewLog.setStatus(StatusEnum.ACCEPTED);
         reviewLog.setUserId(optionalUser);
+
         reviewLog.setRequestFormId(requestForm);
+
          reviewLogService.addReview(reviewLog);
         requestForm.getReviewLogs().add(reviewLog);
         requestForm.setRequestIndex(index+1);

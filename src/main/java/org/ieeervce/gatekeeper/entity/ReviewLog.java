@@ -17,6 +17,7 @@ public class ReviewLog {
     @JoinColumn(name = "requestFormId",referencedColumnName = "requestFormId")
     @JsonIgnore
     private RequestForm requestFormId;
+
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     @Column(nullable = true)
