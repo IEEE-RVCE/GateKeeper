@@ -39,10 +39,10 @@ public class SecurityConfiguration {
     }
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
-                .requestMatchers("/user").hasRole("ADMIN")
-                .requestMatchers("/role").hasRole("ADMIN")
-                .requestMatchers("/society").hasRole("ADMIN")
-                .anyRequest().authenticated();
+//                .requestMatchers("/user").hasRole("ADMIN")
+//                .requestMatchers("/role").hasRole("ADMIN")
+//                .requestMatchers("/society").hasRole("ADMIN")
+                .anyRequest().permitAll();
 
     }
 
