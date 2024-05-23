@@ -8,26 +8,26 @@ public class ReviewLog {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    private Long reviewLogId;
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "userId")
     @JsonIgnore
     private User userId;
     @ManyToOne
-    @JoinColumn(name = "formId",referencedColumnName = "id")
+    @JoinColumn(name = "requestFormId",referencedColumnName = "requestFormId")
     @JsonIgnore
-    private RequestForm formId;
+    private RequestForm requestFormId;
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     @Column(nullable = true)
     private String comments;
 
-    public Long getId() {
-        return id;
+    public Long getReviewLogId() {
+        return reviewLogId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setReviewLogId(Long reviewLogId) {
+        this.reviewLogId = reviewLogId;
     }
 
     public User getUserId() {
@@ -38,12 +38,12 @@ public class ReviewLog {
         this.userId = userId;
     }
 
-    public RequestForm getFormId() {
-        return formId;
+    public RequestForm getRequestFormId() {
+        return requestFormId;
     }
 
-    public void setFormId(RequestForm formId) {
-        this.formId = formId;
+    public void setRequestFormId(RequestForm formId) {
+        this.requestFormId = formId;
     }
 
     public StatusEnum getStatus() {

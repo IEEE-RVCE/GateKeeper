@@ -13,7 +13,7 @@ import java.util.List;
 public class RequestForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long requestFormId;
 
     @Column(nullable = false)
     private String eventTitle;
@@ -70,7 +70,7 @@ public class RequestForm {
         this.requestIndex = requestIndex;
     }
 
-    @ManyToMany(mappedBy = "formId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "requestFormId")
     @JsonIgnore
     private List<ReviewLog> reviewLogs;
 
@@ -85,12 +85,12 @@ public class RequestForm {
         isFinance = finance;
     }
 
-    public Long getId() {
-        return id;
+    public Long getRequestFormId() {
+        return requestFormId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRequestFormId(Long id) {
+        this.requestFormId = id;
     }
 
     public String getEventTitle() {

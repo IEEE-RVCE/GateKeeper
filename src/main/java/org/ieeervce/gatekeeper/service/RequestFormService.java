@@ -48,7 +48,7 @@ public RequestForm add(RequestForm requestForm){
  public RequestForm edit(Long requestFormId, RequestForm editedRequestForm) throws ItemNotFoundException{
      Optional<RequestForm> existingRequestForm = requestFormRepository.findById(requestFormId);
      return existingRequestForm.map((requestForm)->{
-        editedRequestForm.setId(requestFormId);
+        editedRequestForm.setRequestFormId(requestFormId);
         editedRequestForm.setCreatedAt(requestForm.getCreatedAt());
         return requestFormRepository.save(editedRequestForm);
      }).orElseThrow(()-> new ItemNotFoundException(ITEM_NOT_FOUND+requestFormId));
