@@ -23,13 +23,11 @@ public class ReviewLogService {
     }
     public List<ReviewLog> viewByFormId(int Id)
     {
-        return reviewLogRepository.findAllById(Id);
+        return reviewLogRepository.findAllByReviewLogId(Id);
     }
     public List<ReviewLog> findById(long id, Sort sort)
     {
-        return reviewLogRepository.findById(id,sort);
+        return reviewLogRepository.findByReviewLogId(id,sort);
     }
-
-
 
 }
