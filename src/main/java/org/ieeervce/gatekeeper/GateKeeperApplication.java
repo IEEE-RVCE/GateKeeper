@@ -14,7 +14,7 @@ public class GateKeeperApplication {
 
 	@GetMapping("/")
 	String index(){
-		return "works";
+		return "GateKeeper";
 	}
 
 	public static void main(String[] args) {
