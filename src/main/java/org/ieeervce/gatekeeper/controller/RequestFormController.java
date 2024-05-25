@@ -33,7 +33,7 @@ import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterD
 
 @RestController
 @RequestMapping("/requestForm")
-@CrossOrigin("http://localhost:3000")
+
 
 public class RequestFormController {
 
