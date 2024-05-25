@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/role")
-@CrossOrigin("http://localhost:3000")
+
 public class RoleController {
     private final RoleService roleService;
     private final ModelMapper modelMapper;

@@ -11,7 +11,6 @@ public class ReviewLog {
     private Long reviewLogId;
     @ManyToOne
     @JoinColumn(name = "userId",referencedColumnName = "userId")
-    @JsonIgnore
     private User userId;
     @ManyToOne
     @JoinColumn(name = "requestFormId",referencedColumnName = "requestFormId")

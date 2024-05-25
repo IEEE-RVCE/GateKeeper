@@ -20,15 +20,6 @@ public class GateKeeperApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GateKeeperApplication.class, args);
 	}
-	@Bean
-	public WebMvcConfigurer	configure()
-	{
-		return new WebMvcConfigurer() {
 
-			public void addCorsMapping(CorsRegistry reg)
-			{
-				reg.addMapping("/*").allowedOrigins("*");
-			}
-		};
-	}
+
 }
