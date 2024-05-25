@@ -1,8 +1,7 @@
 package org.ieeervce.gatekeeper.controller;
 
-import org.ieeervce.gatekeeper.ItemNotFoundException;
+import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.dto.RoleDTO;
-import org.ieeervce.gatekeeper.dto.SocietyDTO;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.service.RoleService;
 import org.modelmapper.ModelMapper;
@@ -17,7 +16,6 @@ import java.util.List;
 public class RoleController {
     private final RoleService roleService;
     private final ModelMapper modelMapper;
-    @Autowired
     public RoleController(RoleService roleService, ModelMapper modelMapper){
         this.roleService= roleService;
         this.modelMapper=modelMapper;

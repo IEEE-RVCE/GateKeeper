@@ -1,4 +1,4 @@
-package org.ieeervce.gatekeeper;
+package org.ieeervce.gatekeeper.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

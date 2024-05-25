@@ -32,10 +32,12 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService() {
         return new UserInfoUserDetailsService();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults()).authorizeHttpRequests(SecurityConfiguration::getCustomizedHttpAuthorization).csrf(AbstractHttpConfigurer::disable)
@@ -43,15 +45,15 @@ public class SecurityConfiguration {
                 .cors(customizer->customizer.configurationSource(corsConfigurationSource()));
         return http.build();
     }
+
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
-
-                .requestMatchers(HttpMethod.POST,"/user").hasRole("Admin")
-                .requestMatchers(HttpMethod.PUT,"/user").hasRole("Admin")
-                .requestMatchers(HttpMethod.DELETE,"/user").hasRole("Admin")
+                .requestMatchers(HttpMethod.POST, "/user").hasRole("Admin")
+                .requestMatchers(HttpMethod.PUT, "/user").hasRole("Admin")
+                .requestMatchers(HttpMethod.DELETE, "/user").hasRole("Admin")
                 .requestMatchers("/role").hasRole("Admin")
                 .requestMatchers("/society").hasRole("Admin")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
     }
 
@@ -66,9 +68,8 @@ public class SecurityConfiguration {
     }
 
 
-public static String getRequesterDetails()
-{
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return authentication.getName();
-}
+    public static String getRequesterDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
 }

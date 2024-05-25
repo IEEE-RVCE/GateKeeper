@@ -1,35 +1,45 @@
 package org.ieeervce.gatekeeper.service;
 
 import org.ieeervce.gatekeeper.entity.RoleValue;
-import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.RoleRepository;
-import org.ieeervce.gatekeeper.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.ieeervce.gatekeeper.entity.Role;
 
-import java.math.BigInteger;
+import java.util.Map;
 
+/**
+ * Pre-populate a list of roles if not already present
+ */
 @Service
 public class InitializerService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitializerService.class);
+    private static final Map<String,RoleValue> INITIAL_ROLES_MAP = Map.of(
+            "Society Execom", RoleValue.SocietyExecom,
+            "Main Execom", RoleValue.MainExecom,
+            "Faculty Advisor", RoleValue.FacultyAdvisor,
+            "Finance Head", RoleValue.FinanceHead,
+            "Branch Counsellor", RoleValue.BranchCounsellor,
+            "Admin", RoleValue.Admin
+    );
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private UserRepository userRepository;
-
-    public void initializeRoles() {
-        createRoleIfNotFound("Society Execom", RoleValue.SocietyExecom.getValue());
-        createRoleIfNotFound("Main Execom", RoleValue.MainExecom.getValue());
-        createRoleIfNotFound("Faculty Advisor", RoleValue.FacultyAdvisor.getValue());
-        createRoleIfNotFound("Finance Head", RoleValue.FinanceHead.getValue());
-        createRoleIfNotFound("Branch Counsellor", RoleValue.BranchCounsellor.getValue());
-        createRoleIfNotFound("Admin", RoleValue.Admin.getValue());
-
+    public InitializerService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
-    private void createRoleIfNotFound(String roleName,int value) {
-        if (!roleRepository.findByRoleName(roleName).isPresent()) {
+    public void initializeRoles() {
+        LOGGER.info("Starting Role Initializer");
+        for (Map.Entry<String, RoleValue> entry : INITIAL_ROLES_MAP.entrySet()) {
+            createRoleIfNotFound(entry.getKey(), entry.getValue());
+        }
+        LOGGER.debug("Ending Role Initializer");
+    }
+
+    private void createRoleIfNotFound(String roleName, RoleValue roleEnum) {
+        int value = roleEnum.getValue();
+        if (roleRepository.findByRoleName(roleName).isEmpty()) {
             Role role = new Role();
             role.setRoleName(roleName);
             role.setValue(value);

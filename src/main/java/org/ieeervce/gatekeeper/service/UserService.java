@@ -1,11 +1,10 @@
 package org.ieeervce.gatekeeper.service;
 
-import org.ieeervce.gatekeeper.ItemNotFoundException;
+import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
-
 
 
 import java.util.*;
@@ -18,78 +17,68 @@ public class UserService {
     private final String ITEM_NOT_FOUND = "User Id not found";
 
     private final UserRepository repository;
-    @Autowired
-    public UserService(UserRepository repository){
-        this.repository= repository;
+
+    public UserService(UserRepository repository) {
+        this.repository = repository;
     }
 
     public User saveUser(User user) {
         return repository.save(user);
     }
-    public List<User> saveUsers(List<User> users)
-    {
-        return  repository.saveAll(users);
+
+    public List<User> saveUsers(List<User> users) {
+        return repository.saveAll(users);
     }
-    public Optional<User> getUserByEmail(String email)
-    {
+
+    public Optional<User> getUserByEmail(String email) {
         return repository.findByEmail(email);
     }
-    public  User getUserByName(String name)
-    {
+
+    public User getUserByName(String name) {
         return repository.findByName(name);
     }
+
     public User getUserById(Integer userId) throws ItemNotFoundException {
-        return repository.findById(userId).orElseThrow(()-> new ItemNotFoundException(ITEM_NOT_FOUND+userId));
+        return repository.findById(userId).orElseThrow(() -> new ItemNotFoundException(ITEM_NOT_FOUND + userId));
     }
-    public List<User> getUsersByRoleAndSociety(Role role, Society society)
-    {
-        return repository.findByRoleAndSociety(role,society);
+
+    public List<User> getUsersByRoleAndSociety(Role role, Society society) {
+        return repository.findByRoleAndSociety(role, society);
     }
-    public List<User> getUsersByRole(Role role)
-    {
+
+    public List<User> getUsersByRole(Role role) {
         return repository.findByRole(role);
     }
 
 
-
     public void setPendingRequests(RequestForm requestForm, List<Role> requestHierarchy, int requestIndex, User user) {
-        Role role=requestHierarchy.get(requestIndex);
+        Role role = requestHierarchy.get(requestIndex);
 
         List<User> users;
-        if(role.getValue()!= RoleValue.FacultyAdvisor.getValue())
-        {
-            users=getUsersByRole(role);
+        if (role.getValue() != RoleValue.FacultyAdvisor.getValue()) {
+            users = getUsersByRole(role);
+        } else {
+            users = getUsersByRoleAndSociety(role, user.getSociety());
         }
-        else
-        {
-            users=getUsersByRoleAndSociety(role, user.getSociety());
-        }
-        for(User u:users)
-        {
+        for (User u : users) {
             u.getPendingRequests().add(requestForm);
         }
     }
-    public void removePendingRequests(RequestForm requestForm, List<Role> requestHierarchy, int requestIndex, User user,StatusEnum statusEnum) {
-        Role role=requestHierarchy.get(requestIndex);
+
+    public void removePendingRequests(RequestForm requestForm, List<Role> requestHierarchy, int requestIndex, User user, StatusEnum statusEnum) {
+        Role role = requestHierarchy.get(requestIndex);
 
         List<User> users;
-        if(role.getValue()!= RoleValue.FacultyAdvisor.getValue())
-        {
-            users=getUsersByRole(role);
+        if (role.getValue() != RoleValue.FacultyAdvisor.getValue()) {
+            users = getUsersByRole(role);
+        } else {
+            users = getUsersByRoleAndSociety(role, user.getSociety());
         }
-        else
-        {
-            users=getUsersByRoleAndSociety(role, user.getSociety());
-        }
-        for(User u:users)
-        {
+        for (User u : users) {
             u.getPendingRequests().remove(requestForm);
-            if(statusEnum.equals(StatusEnum.ACCEPTED))
-            {
+            if (statusEnum.equals(StatusEnum.ACCEPTED)) {
                 u.getApprovedRequests().add(requestForm);
-            }
-            else
-            {
+            } else {
 
                 u.getRejectedRequests().add(requestForm);
 
