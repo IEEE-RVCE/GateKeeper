@@ -54,7 +54,7 @@ public class SecurityConfiguration {
                 .anyRequest().authenticated();
 
     }
-    @Bean
+
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
