@@ -5,7 +5,6 @@ import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.RequestForm;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.RequestFormRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class RequestFormService {
     static final String ITEM_NOT_FOUND = "Request Form Not Found";
     private final RequestFormRepository requestFormRepository;
 
-    @Autowired
     RequestFormService(RequestFormRepository requestFormRepository) {
         this.requestFormRepository = requestFormRepository;
     }
