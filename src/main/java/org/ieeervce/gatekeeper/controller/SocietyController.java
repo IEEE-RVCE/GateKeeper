@@ -1,6 +1,6 @@
 package org.ieeervce.gatekeeper.controller;
 
-import org.ieeervce.gatekeeper.ItemNotFoundException;
+import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.dto.SocietyDTO;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.service.SocietyService;

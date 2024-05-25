@@ -1,9 +1,8 @@
 package org.ieeervce.gatekeeper.controller;
 
-import org.ieeervce.gatekeeper.InvalidDataException;
-import org.ieeervce.gatekeeper.ItemNotFoundException;
+import org.ieeervce.gatekeeper.exception.InvalidDataException;
+import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.dto.UserDTO;
-import org.ieeervce.gatekeeper.entity.RequestForm;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.entity.User;
@@ -16,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.ieeervce.gatekeeper.service.UserService;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +25,7 @@ public class UserController {
     private final ModelMapper modelMapper;
     private final SocietyService societyService;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
     PropertyMap<UserDTO,User> skipReferencedFieldsMap = new PropertyMap<UserDTO, User>() {
         @Override
         protected void configure() {
@@ -34,7 +33,6 @@ public class UserController {
         }
     };
 
-    private PasswordEncoder passwordEncoder;
     @Autowired
     public UserController(UserService userService, ModelMapper modelMapper,SocietyService societyService,RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
@@ -70,14 +68,9 @@ public class UserController {
     @GetMapping("/{email}")
     public UserDTO getUserByEmail(@PathVariable String email) throws ItemNotFoundException{
         Optional<User> userOptional = userService.getUserByEmail(email);
-        if(userOptional.isPresent()){
-            User user = userOptional.get();
-            return modelMapper.map(user, UserDTO.class);
-        }
-        else{
-            throw new ItemNotFoundException("User Not Found");
-        }
-
+        return userOptional
+                .map(user->modelMapper.map(user, UserDTO.class))
+                .orElseThrow(()->new ItemNotFoundException("User Not Found"));
     }
 
 }

@@ -1,7 +1,7 @@
 package org.ieeervce.gatekeeper.service;
 
 import jakarta.transaction.Transactional;
-import org.ieeervce.gatekeeper.ItemNotFoundException;
+import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.repository.SocietyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ public class SocietyService {
     static final String SOCIETY_ID_NOT_FOUND = "Society id not found: ";
     private final SocietyRepository societyRepository;
 
-    @Autowired
     public SocietyService(SocietyRepository societyRepository) {
         this.societyRepository = societyRepository;
     }

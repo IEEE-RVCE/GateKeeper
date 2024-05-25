@@ -1,11 +1,15 @@
-package org.ieeervce.gatekeeper;
+package org.ieeervce.gatekeeper.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InvalidDataException extends Exception{
-    public InvalidDataException(String message){
+public class PDFNotConversionException extends Exception{
+    public PDFNotConversionException(String message){
         super(message);
     }
 }
+
+
+
+
