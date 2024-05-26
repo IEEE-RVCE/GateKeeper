@@ -1,0 +1,6 @@
+debug: true
+spring:
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/mydatabase'
+    username: myuser
+    password: secret
