@@ -79,7 +79,7 @@ public class RequestFormController {
         return modelMapper.map(requestFormService.findOne(requestFormId), ResponseRequestFormDTO.class);
     }
 
-    @DeleteMapping("/{requestFormID}")
+    @DeleteMapping("/{requestFormId}")
     public void deleteRequestForm(@PathVariable Long requestFormId) throws ItemNotFoundException {
         requestFormService.delete(requestFormId);
     }
