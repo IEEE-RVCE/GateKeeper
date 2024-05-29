@@ -2,6 +2,7 @@ package org.ieeervce.gatekeeper.config;
 
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.service.UserInfoUserDetailsService;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -48,20 +49,26 @@ public class SecurityConfiguration {
 
     private static void getCustomizedHttpAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry customizer) {
         customizer
-                .requestMatchers(HttpMethod.POST, "/user").hasRole("Admin")
-                .requestMatchers(HttpMethod.PUT, "/user").hasRole("Admin")
-                .requestMatchers(HttpMethod.DELETE, "/user").hasRole("Admin")
-                .requestMatchers("/role").hasRole("Admin")
-                .requestMatchers("/society").hasRole("Admin")
-                .anyRequest().permitAll();
+//
+//                .requestMatchers(HttpMethod.POST,"/user").hasRole("Admin")
+//                .requestMatchers(HttpMethod.PUT,"/user").hasRole("Admin")
+//                .requestMatchers(HttpMethod.DELETE,"/user").hasRole("Admin")
+//                .requestMatchers("/role").hasRole("Admin")
+//                .requestMatchers("/society").hasRole("Admin")
+                //           .requestMatchers("/requestForm/byRequester").authenticated()
+                .requestMatchers("/").permitAll()
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
+                .anyRequest().authenticated();
 
     }
 
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
