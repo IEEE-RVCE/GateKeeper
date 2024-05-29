@@ -64,7 +64,7 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","gate.ieee-rvce.org"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://gate.ieee-rvce.org"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
