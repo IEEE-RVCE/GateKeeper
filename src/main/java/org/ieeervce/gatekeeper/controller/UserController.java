@@ -17,6 +17,8 @@ import org.ieeervce.gatekeeper.service.UserService;
 
 import java.util.Optional;
 
+import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterDetails;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -63,7 +65,11 @@ public class UserController {
 
         return userService.saveUser(user);
     }
-
+    @GetMapping
+    public String getUser()
+    {
+        return getRequesterDetails();
+    }
     @GetMapping("/{email}")
     public UserDTO getUserByEmail(@PathVariable String email) throws ItemNotFoundException{
         Optional<User> userOptional = userService.getUserByEmail(email);
