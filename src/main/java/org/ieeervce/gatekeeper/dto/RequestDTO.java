@@ -1,20 +1,34 @@
 package org.ieeervce.gatekeeper.dto;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.ieeervce.gatekeeper.entity.FinalStatus;
+import org.ieeervce.gatekeeper.entity.ReviewLog;
 import org.ieeervce.gatekeeper.entity.Role;
+import org.ieeervce.gatekeeper.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
+/*
+DTO for sending truncated response
+RequestDTO inherits from it
+*/
 public class RequestDTO {
-    private MultipartFile formPDF ;
+    private Long id;
     private String eventTitle;
-    private Integer requesterUserId;
+    private int formValue;
 
-    private boolean isFinance ;
-    private List<Role> requestHierarchy;
+    private UserResponseDTO requester;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    private int requestIndex;
+    private FinalStatus status;
+
+
+    int requestIndex;
 
     public int getRequestIndex() {
         return requestIndex;
@@ -24,12 +38,23 @@ public class RequestDTO {
         this.requestIndex = requestIndex;
     }
 
-    public List<Role> getRequestHierarchy() {
-        return requestHierarchy;
+
+    private boolean isFinance;
+
+    public boolean isFinance() {
+        return isFinance;
     }
 
-    public void setRequestHierarchy(List<Role> requestHierarchy) {
-        this.requestHierarchy = requestHierarchy;
+    public void setFinance(boolean finance) {
+        isFinance = finance;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEventTitle() {
@@ -40,28 +65,50 @@ public class RequestDTO {
         this.eventTitle = eventTitle;
     }
 
-    public Integer getRequesterUserId() {
-        return requesterUserId;
+    public UserResponseDTO getRequester() {
+        return requester;
     }
 
-    public void setRequesterUserId(Integer requesterUserId) {
-        this.requesterUserId = requesterUserId;
+    public void setRequester(UserResponseDTO requester) {
+        this.requester = requester;
     }
 
 
-    public boolean isFinance() {
-        return isFinance;
+    public FinalStatus getStatus() {
+        return status;
     }
 
-    public void setFinance(boolean finance) {
-        isFinance = finance;
+    public void setStatus(FinalStatus status) {
+        this.status = status;
     }
 
-    public MultipartFile getFormPDF() {
-        return formPDF;
+    public void setFormValue(int formValue) {
+        this.formValue = formValue;
     }
 
-    public void setFormPDF(MultipartFile formPDF) {
-        this.formPDF = formPDF;
+    public int getFormValue() {
+        return formValue;
     }
+
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+
+
 }
+

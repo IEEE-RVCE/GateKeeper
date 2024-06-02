@@ -47,7 +47,7 @@ public class ResponseRequestFormDTO {
         this.requestIndex = requestIndex;
     }
 
-    private List<ReviewLog> reviewLogs;
+    private List<ReviewLogDTO> reviewLogs;
 
     private boolean isFinance;
 
@@ -108,11 +108,11 @@ public class ResponseRequestFormDTO {
         this.formPDF = formPDF;
     }
 
-    public List<ReviewLog> getReviewLogs() {
+    public List<ReviewLogDTO> getReviewLogs() {
         return reviewLogs;
     }
 
-    public void setReviewLogs(List<ReviewLog> reviewLogs) {
+    public void setReviewLogs(List<ReviewLogDTO> reviewLogs) {
         this.reviewLogs = reviewLogs;
     }
 

@@ -1,9 +1,6 @@
 package org.ieeervce.gatekeeper.dto;
 
-/**
- * Society DTO to create/update a society.
- */
-public class SocietyDTO {
+public class UserReviewLogDTO {
     private String name;
 
     public String getName() {
@@ -13,5 +10,4 @@ public class SocietyDTO {
     public void setName(String name) {
         this.name = name;
     }
-
 }
