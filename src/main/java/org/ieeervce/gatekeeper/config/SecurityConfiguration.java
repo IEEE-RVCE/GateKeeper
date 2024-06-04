@@ -41,9 +41,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults()).authorizeHttpRequests(SecurityConfiguration::getCustomizedHttpAuthorization).csrf(AbstractHttpConfigurer::disable)
-
+        http.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.loginPage("/login1").permitAll())
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(SecurityConfiguration::getCustomizedHttpAuthorization)
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(customizer->customizer.configurationSource(corsConfigurationSource()));
+
         return http.build();
     }
 
