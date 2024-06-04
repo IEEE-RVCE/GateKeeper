@@ -1,4 +1,4 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.RequestForm;
 
 public class RequestFormPdfDTO {
     private byte[] formPDF;

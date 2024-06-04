@@ -1,45 +1,29 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.RequestForm;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.ieeervce.gatekeeper.dto.User.UserInternalDTO;
 import org.ieeervce.gatekeeper.entity.FinalStatus;
-import org.ieeervce.gatekeeper.entity.ReviewLog;
-import org.ieeervce.gatekeeper.entity.Role;
-import org.ieeervce.gatekeeper.entity.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 /*
 DTO for sending truncated response
 RequestDTO inherits from it
+Used for truncating Get all request forms and request form by requester.
 */
+
 public class RequestDTO {
     private Long id;
     private String eventTitle;
-    private int formValue;
 
-    private UserResponseDTO requester;
+
+    private UserInternalDTO requester;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     private FinalStatus status;
 
-
-    int requestIndex;
-
-    public int getRequestIndex() {
-        return requestIndex;
-    }
-
-    public void setRequestIndex(int requestIndex) {
-        this.requestIndex = requestIndex;
-    }
-
-
     private boolean isFinance;
+
 
     public boolean isFinance() {
         return isFinance;
@@ -65,11 +49,11 @@ public class RequestDTO {
         this.eventTitle = eventTitle;
     }
 
-    public UserResponseDTO getRequester() {
+    public UserInternalDTO getRequester() {
         return requester;
     }
 
-    public void setRequester(UserResponseDTO requester) {
+    public void setRequester(UserInternalDTO requester) {
         this.requester = requester;
     }
 
@@ -82,13 +66,6 @@ public class RequestDTO {
         this.status = status;
     }
 
-    public void setFormValue(int formValue) {
-        this.formValue = formValue;
-    }
-
-    public int getFormValue() {
-        return formValue;
-    }
 
 
 

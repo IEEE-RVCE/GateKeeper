@@ -3,9 +3,9 @@ package org.ieeervce.gatekeeper.controller;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.exception.PDFNotConversionException;
-import org.ieeervce.gatekeeper.dto.RequestDTO;
-import org.ieeervce.gatekeeper.dto.RequestFormPdfDTO;
-import org.ieeervce.gatekeeper.dto.ResponseRequestFormDTO;
+import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
+import org.ieeervce.gatekeeper.dto.RequestForm.RequestFormPdfDTO;
+import org.ieeervce.gatekeeper.dto.RequestForm.ResponseRequestFormDTO;
 import org.ieeervce.gatekeeper.entity.*;
 
 import org.ieeervce.gatekeeper.service.RequestFormService;
@@ -61,14 +61,18 @@ public class RequestFormController {
     }
 
     @GetMapping
-    public List<RequestForm> getAll() {
-        return requestFormService.list();
+    public List<RequestDTO> getAll() {
+        List<RequestForm> requestFormList=requestFormService.list();
+        Type listType = new TypeToken<List<RequestDTO>>() {
+        }.getType();
+        return modelMapper.map(requestFormList, listType);
+
     }
 
     @GetMapping("/byRequester")
-    public List<RequestFormPdfDTO> getByUser() {
+    public List<RequestDTO> getByUser() {
         List<RequestForm> requestFormList = requestFormService.getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
-        Type listType = new TypeToken<List<ResponseRequestFormDTO>>() {
+        Type listType = new TypeToken<List<RequestDTO>>() {
         }.getType();
         return modelMapper.map(requestFormList, listType);
     }
@@ -180,12 +184,6 @@ public class RequestFormController {
 
     }
 
-    @GetMapping("/")
-    private List<ResponseRequestFormDTO> getAllRequests() {
-        List<RequestForm> requestFormList = requestFormService.getAllRequests();
-        Type listType = new TypeToken<List<ResponseRequestFormDTO>>() {
-        }.getType();
-        return modelMapper.map(requestFormList, listType);
-    }
+
 
 }

@@ -1,20 +1,17 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.User;
 
-
-import org.ieeervce.gatekeeper.entity.RequestForm;
+import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UserDTO {
+public class UserResponseDTO {
     private String name;
     private String email;
 
-    private String password;
     private Integer societyId;
     private Integer roleId;
 
-    private Long number;
     private boolean enabled;
     private boolean unsubscribed;
     private LocalDateTime createdAt;
@@ -58,14 +55,6 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public Long getNumber() {
-        return number;
-    }
-
-    public void setNumber(Long number) {
-        this.number = number;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -74,15 +63,6 @@ public class UserDTO {
         this.email = email;
     }
 
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Integer getRoleId() {
         return roleId;
@@ -99,7 +79,7 @@ public class UserDTO {
     public void setSocietyId(Integer societyId) {
         this.societyId = societyId;
     }
-     public String getName() {
+    public String getName() {
         return name;
     }
 
@@ -131,3 +111,5 @@ public class UserDTO {
         this.rejectedRequests = rejectedRequests;
     }
 }
+
+

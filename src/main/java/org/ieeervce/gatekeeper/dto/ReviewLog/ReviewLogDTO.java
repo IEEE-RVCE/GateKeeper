@@ -1,17 +1,18 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.ReviewLog;
 
+import org.ieeervce.gatekeeper.dto.User.UserInternalDTO;
 import org.ieeervce.gatekeeper.entity.StatusEnum;
 
 public class ReviewLogDTO {
-    private UserReviewLogDTO user;
+    private UserInternalDTO user;
     private StatusEnum status;
     private String comments;
 
-    public UserReviewLogDTO getUser() {
+    public UserInternalDTO getUser() {
         return user;
     }
 
-    public void setUser(UserReviewLogDTO user) {
+    public void setUser(UserInternalDTO user) {
         this.user = user;
     }
 

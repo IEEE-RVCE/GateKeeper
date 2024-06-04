@@ -1,11 +1,10 @@
 package org.ieeervce.gatekeeper.controller;
 
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
-import org.ieeervce.gatekeeper.dto.RoleDTO;
+import org.ieeervce.gatekeeper.dto.Role.RoleDTO;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.service.RoleService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

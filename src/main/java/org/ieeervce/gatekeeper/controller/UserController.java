@@ -1,9 +1,9 @@
 package org.ieeervce.gatekeeper.controller;
 
-import org.ieeervce.gatekeeper.dto.UserResponseDTO;
+import org.ieeervce.gatekeeper.dto.User.UserResponseDTO;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
-import org.ieeervce.gatekeeper.dto.UserDTO;
+import org.ieeervce.gatekeeper.dto.User.UserDTO;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.entity.User;
