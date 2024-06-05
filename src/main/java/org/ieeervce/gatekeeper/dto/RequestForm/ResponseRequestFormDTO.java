@@ -1,14 +1,9 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.RequestForm;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.ieeervce.gatekeeper.dto.ReviewLog.ReviewLogDTO;
+import org.ieeervce.gatekeeper.dto.User.UserInternalDTO;
 import org.ieeervce.gatekeeper.entity.FinalStatus;
-import org.ieeervce.gatekeeper.entity.ReviewLog;
 import org.ieeervce.gatekeeper.entity.Role;
-import org.ieeervce.gatekeeper.entity.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +16,7 @@ public class ResponseRequestFormDTO {
     private String eventTitle;
     private int formValue;
 
-    private User requester;
+    private UserInternalDTO requester;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -47,7 +42,7 @@ public class ResponseRequestFormDTO {
         this.requestIndex = requestIndex;
     }
 
-    private List<ReviewLog> reviewLogs;
+    private List<ReviewLogDTO> reviewLogs;
 
     private boolean isFinance;
 
@@ -75,11 +70,11 @@ public class ResponseRequestFormDTO {
         this.eventTitle = eventTitle;
     }
 
-    public User getRequester() {
+    public UserInternalDTO getRequester() {
         return requester;
     }
 
-    public void setRequester(User requester) {
+    public void setRequester(UserInternalDTO requester) {
         this.requester = requester;
     }
 
@@ -108,11 +103,11 @@ public class ResponseRequestFormDTO {
         this.formPDF = formPDF;
     }
 
-    public List<ReviewLog> getReviewLogs() {
+    public List<ReviewLogDTO> getReviewLogs() {
         return reviewLogs;
     }
 
-    public void setReviewLogs(List<ReviewLog> reviewLogs) {
+    public void setReviewLogs(List<ReviewLogDTO> reviewLogs) {
         this.reviewLogs = reviewLogs;
     }
 
