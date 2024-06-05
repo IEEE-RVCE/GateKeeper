@@ -1,38 +1,35 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.User;
 
-
-import org.ieeervce.gatekeeper.entity.RequestForm;
+import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UserDTO {
+public class UserResponseDTO {
     private String name;
     private String email;
 
-    private String password;
     private Integer societyId;
     private Integer roleId;
 
-    private Long number;
     private boolean enabled;
     private boolean unsubscribed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<RequestForm> approvedRequests;
-    private List<RequestForm> pendingRequests;
-    private List<RequestForm> rejectedRequests;
+    private List<RequestDTO> approvedRequests;
+    private List<RequestDTO> pendingRequests;
+    private List<RequestDTO> rejectedRequests;
 
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public List<RequestForm> getApprovedRequests() {
+    public List<RequestDTO> getApprovedRequests() {
         return approvedRequests;
     }
 
-    public void setApprovedRequests(List<RequestForm> approvedRequests) {
+    public void setApprovedRequests(List<RequestDTO> approvedRequests) {
         this.approvedRequests = approvedRequests;
     }
 
@@ -58,14 +55,6 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public Long getNumber() {
-        return number;
-    }
-
-    public void setNumber(Long number) {
-        this.number = number;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -74,15 +63,6 @@ public class UserDTO {
         this.email = email;
     }
 
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Integer getRoleId() {
         return roleId;
@@ -99,7 +79,7 @@ public class UserDTO {
     public void setSocietyId(Integer societyId) {
         this.societyId = societyId;
     }
-     public String getName() {
+    public String getName() {
         return name;
     }
 
@@ -115,19 +95,21 @@ public class UserDTO {
         this.unsubscribed = unsubscribed;
     }
 
-    public List<RequestForm> getPendingRequests() {
+    public List<RequestDTO> getPendingRequests() {
         return pendingRequests;
     }
 
-    public void setPendingRequests(List<RequestForm> pendingRequests) {
+    public void setPendingRequests(List<RequestDTO> pendingRequests) {
         this.pendingRequests = pendingRequests;
     }
 
-    public List<RequestForm> getRejectedRequests() {
+    public List<RequestDTO> getRejectedRequests() {
         return rejectedRequests;
     }
 
-    public void setRejectedRequests(List<RequestForm> rejectedRequests) {
+    public void setRejectedRequests(List<RequestDTO> rejectedRequests) {
         this.rejectedRequests = rejectedRequests;
     }
 }
+
+

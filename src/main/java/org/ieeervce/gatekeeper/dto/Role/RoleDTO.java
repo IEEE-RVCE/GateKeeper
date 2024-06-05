@@ -1,4 +1,4 @@
-package org.ieeervce.gatekeeper.dto;
+package org.ieeervce.gatekeeper.dto.Role;
 
 public class RoleDTO {
     private int value;
