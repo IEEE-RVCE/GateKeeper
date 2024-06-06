@@ -51,7 +51,7 @@ public class RequestFormService {
     }
 
     public List<RequestForm> getRequestFormByRequester(User user) {
-        return requestFormRepository.findByRequester(user);
+        return requestFormRepository.findAllByRequesterOrderByCreatedAtDesc(user);
     }
 
 
