@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RequestFormRepository extends JpaRepository<RequestForm,Long> {
-    List<RequestForm> findByRequester(User user);
-}
+    List<RequestForm> findAllByRequesterOrderByCreatedAtDesc(User user);
+    List<RequestForm> findAllByOrderByCreatedAtDesc();}
