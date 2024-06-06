@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RequestFormRepository extends JpaRepository<RequestForm,Long> {
     List<RequestForm> findByRequester(User user);
+    List<RequestForm> findAllByOrderByCreatedAtDesc();
 }

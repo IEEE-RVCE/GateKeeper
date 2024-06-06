@@ -29,7 +29,7 @@ public class RequestFormService {
     }
 
     public List<RequestForm> list() {
-        return requestFormRepository.findAll();
+        return requestFormRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public RequestForm save(RequestForm requestForm) {
