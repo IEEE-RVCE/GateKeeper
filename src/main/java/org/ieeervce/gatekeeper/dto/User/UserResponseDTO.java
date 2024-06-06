@@ -110,6 +110,11 @@ public class UserResponseDTO {
     public void setRejectedRequests(List<RequestDTO> rejectedRequests) {
         this.rejectedRequests = rejectedRequests;
     }
+    public void sortPendingRequestsByDate() {
+        if (pendingRequests != null) {
+            pendingRequests.sort((r2, r1) -> r1.getCreatedAt().compareTo(r2.getCreatedAt()));
+        }
+    }
 }
 
 

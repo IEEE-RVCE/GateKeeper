@@ -6,7 +6,7 @@ import org.ieeervce.gatekeeper.entity.RequestForm;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.repository.RequestFormRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class RequestFormService {
     }
 
     public List<RequestForm> list() {
-        return requestFormRepository.findAll();
+        return requestFormRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     public RequestForm save(RequestForm requestForm) {
@@ -51,7 +51,7 @@ public class RequestFormService {
     }
 
     public List<RequestForm> getRequestFormByRequester(User user) {
-        return requestFormRepository.findByRequester(user);
+        return requestFormRepository.findByRequester(Sort.by(Sort.Direction.DESC, "createdAt"),user);
     }
 
 
