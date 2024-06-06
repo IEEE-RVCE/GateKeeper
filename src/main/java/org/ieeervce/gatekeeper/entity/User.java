@@ -56,7 +56,7 @@ public class User {
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "formId")
     )
-
+    @OrderBy("createdAt DESC")
     private List<RequestForm> pendingRequests;
 
     @ManyToMany

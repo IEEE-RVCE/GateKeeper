@@ -75,12 +75,8 @@ public class UserController {
     public UserResponseDTO getUserByEmail(@PathVariable String email) throws ItemNotFoundException{
         Optional<User> userOptional = userService.getUserByEmail(email);
         return userOptional
-                .map(user -> {
-                    UserResponseDTO userResponseDTO = modelMapper.map(user, UserResponseDTO.class);
-                    userResponseDTO.sortPendingRequestsByDate();
-                    return userResponseDTO;
-                })
-                .orElseThrow(() -> new ItemNotFoundException("User Not Found"));
+                .map(user->modelMapper.map(user, UserResponseDTO.class))
+                .orElseThrow(()->new ItemNotFoundException("User Not Found"));
     }
 
 }
