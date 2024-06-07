@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.service.UserInfoUserDetailsService;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -18,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -41,8 +44,11 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.COOKIES));
+
         http.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.failureForwardUrl("/loginStatus/failed").successForwardUrl("/loginStatus/success"))
                 .httpBasic(Customizer.withDefaults())
+
                 .authorizeHttpRequests(SecurityConfiguration::getCustomizedHttpAuthorization)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(customizer->customizer.configurationSource(corsConfigurationSource()));
@@ -60,6 +66,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/society").hasRole("Admin")
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/loginStatus/**").permitAll()
+                .requestMatchers("/logout").permitAll()
+                .requestMatchers("/login").permitAll()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 .anyRequest().authenticated();
 

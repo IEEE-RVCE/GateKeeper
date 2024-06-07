@@ -62,7 +62,18 @@ public class RequestFormController {
 
     @GetMapping
     public List<RequestDTO> getAll() {
-        List<RequestForm> requestFormList=requestFormService.list();
+        User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        List<RequestForm> requestFormList;
+        try
+        {
+            Integer societyId=optionalUser.getSociety().getSocietyId();
+            requestFormList=requestFormService.findRequestsBySociety(societyId);
+        }
+        catch(Exception e)
+        {
+            requestFormList=requestFormService.list();
+        }
+
         Type listType = new TypeToken<List<RequestDTO>>() {
         }.getType();
         return modelMapper.map(requestFormList, listType);
@@ -79,8 +90,17 @@ public class RequestFormController {
 
     @GetMapping("/{requestFormId}")
     public ResponseRequestFormDTO getOne(@PathVariable Long requestFormId) throws ItemNotFoundException {
+        User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        ResponseRequestFormDTO responseDTO= modelMapper.map(requestFormService.findOne(requestFormId), ResponseRequestFormDTO.class);
+        List<RequestForm> pendingRequests=optionalUser.getPendingRequests();
+        for(RequestForm requestForm:pendingRequests)
+        {
+            if(requestForm.getRequestFormId().equals(requestFormId))
+                responseDTO.setActionable(true);
+        }
 
-        return modelMapper.map(requestFormService.findOne(requestFormId), ResponseRequestFormDTO.class);
+        return responseDTO;
+
     }
 
     @DeleteMapping("/{requestFormId}")
