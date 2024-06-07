@@ -10,9 +10,10 @@ import java.util.List;
 
 public interface RequestFormRepository extends JpaRepository<RequestForm,Long> {
     List<RequestForm> findAllByRequesterOrderByCreatedAtDesc(User user);
-
+  
     List<RequestForm> findAllByOrderByCreatedAtDesc();
 
     @Query("SELECT rf FROM RequestForm rf WHERE rf.requester.society.societyId = :societyId ORDER BY rf.createdAt DESC")
     List<RequestForm> findByRequesterSociety(@Param("societyId") Integer societyId);
 }
+
