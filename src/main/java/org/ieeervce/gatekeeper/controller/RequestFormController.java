@@ -1,13 +1,22 @@
 package org.ieeervce.gatekeeper.controller;
 
-import org.ieeervce.gatekeeper.exception.InvalidDataException;
-import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
-import org.ieeervce.gatekeeper.exception.PDFNotConversionException;
+import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterDetails;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestFormPdfDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.ResponseRequestFormDTO;
-import org.ieeervce.gatekeeper.entity.*;
-
+import org.ieeervce.gatekeeper.entity.FinalStatus;
+import org.ieeervce.gatekeeper.entity.RequestForm;
+import org.ieeervce.gatekeeper.entity.ReviewLog;
+import org.ieeervce.gatekeeper.entity.StatusEnum;
+import org.ieeervce.gatekeeper.entity.User;
+import org.ieeervce.gatekeeper.exception.InvalidDataException;
+import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
+import org.ieeervce.gatekeeper.exception.PDFNotConversionException;
 import org.ieeervce.gatekeeper.service.RequestFormService;
 import org.ieeervce.gatekeeper.service.ReviewLogService;
 import org.ieeervce.gatekeeper.service.RoleService;
@@ -18,18 +27,19 @@ import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.lang.reflect.Type;
-
-import java.util.List;
-
-import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterDetails;
 
 @RestController
 @RequestMapping("/requestForm")
-
 
 public class RequestFormController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestFormController.class);
@@ -48,7 +58,8 @@ public class RequestFormController {
         }
     };
 
-    RequestFormController(RequestFormService requestFormService, ModelMapper modelMapper, UserService userService, RoleService roleService, ReviewLogService reviewLogService) {
+    RequestFormController(RequestFormService requestFormService, ModelMapper modelMapper, UserService userService,
+            RoleService roleService, ReviewLogService reviewLogService) {
         this.requestFormService = requestFormService;
         this.modelMapper = modelMapper;
         this.userService = userService;
@@ -57,32 +68,38 @@ public class RequestFormController {
         this.modelMapper.addMappings(skipReferencedFieldsMap);
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true);
 
-
     }
 
     @GetMapping
     public List<RequestDTO> getAll() {
-        User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
-        List<RequestForm> requestFormList;
-        try
-        {
-            Integer societyId=optionalUser.getSociety().getSocietyId();
-            requestFormList=requestFormService.findRequestsBySociety(societyId);
-        }
-        catch(Exception e)
-        {
-            requestFormList=requestFormService.list();
+        String requesterEmail = getRequesterDetails();
+        Optional<User> optionalUser = userService.getUserByEmail(requesterEmail);
+
+        List<RequestForm> requestFormList = new ArrayList<>();
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            try {
+                Integer societyId = user.getSociety().getSocietyId();
+                requestFormList = requestFormService.findRequestsBySociety(societyId);
+            } catch (Exception e) {
+                LOGGER.error("Error fetching requests by society", e);
+                requestFormList = requestFormService.list();
+            }
+        } else {
+            LOGGER.warn("User not found with email: " + requesterEmail);
+            requestFormList = requestFormService.list();
         }
 
         Type listType = new TypeToken<List<RequestDTO>>() {
         }.getType();
         return modelMapper.map(requestFormList, listType);
-
     }
 
     @GetMapping("/byRequester")
     public List<RequestDTO> getByUser() {
-        List<RequestForm> requestFormList = requestFormService.getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
+        List<RequestForm> requestFormList = requestFormService
+                .getRequestFormByRequester(userService.getUserByEmail(getRequesterDetails()).get());
         Type listType = new TypeToken<List<RequestDTO>>() {
         }.getType();
         return modelMapper.map(requestFormList, listType);
@@ -90,17 +107,30 @@ public class RequestFormController {
 
     @GetMapping("/{requestFormId}")
     public ResponseRequestFormDTO getOne(@PathVariable Long requestFormId) throws ItemNotFoundException {
-        User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
-        ResponseRequestFormDTO responseDTO= modelMapper.map(requestFormService.findOne(requestFormId), ResponseRequestFormDTO.class);
-        List<RequestForm> pendingRequests=optionalUser.getPendingRequests();
-        for(RequestForm requestForm:pendingRequests)
-        {
-            if(requestForm.getRequestFormId().equals(requestFormId))
+        Optional<User> optionalUser = userService.getUserByEmail(getRequesterDetails());
+
+        if (!optionalUser.isPresent()) {
+            throw new ItemNotFoundException("User not found with email: " + getRequesterDetails());
+        }
+
+        User user = optionalUser.get();
+        RequestForm requestForm = requestFormService.findOne(requestFormId);
+
+        if (requestForm == null) {
+            throw new ItemNotFoundException("Request form not found with ID: " + requestFormId);
+        }
+
+        ResponseRequestFormDTO responseDTO = modelMapper.map(requestForm, ResponseRequestFormDTO.class);
+        List<RequestForm> pendingRequests = user.getPendingRequests();
+
+        for (RequestForm pendingRequest : pendingRequests) {
+            if (pendingRequest.getRequestFormId().equals(requestFormId)) {
                 responseDTO.setActionable(true);
+                break;
+            }
         }
 
         return responseDTO;
-
     }
 
     @DeleteMapping("/{requestFormId}")
@@ -109,7 +139,9 @@ public class RequestFormController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseRequestFormDTO postRequestForm(@RequestParam("eventTitle") String eventTitle, @RequestParam("isFinance") boolean isFinance, @RequestParam("formPDF") MultipartFile formPDF) throws InvalidDataException, PDFNotConversionException {
+    public ResponseRequestFormDTO postRequestForm(@RequestParam("eventTitle") String eventTitle,
+            @RequestParam("isFinance") boolean isFinance, @RequestParam("formPDF") MultipartFile formPDF)
+            throws InvalidDataException, PDFNotConversionException {
         LOGGER.info("in: post request form");
         RequestForm requestForm = new RequestForm();
         requestForm.setEventTitle(eventTitle);
@@ -121,10 +153,10 @@ public class RequestFormController {
             User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
             requestForm.setRequester(optionalUser);
 
-
             requestForm.setRequestHierarchy(roleService.generateHierarchy(optionalUser, isFinance));
 
-            userService.setPendingRequests(requestForm, requestForm.getRequestHierarchy(), requestForm.getRequestIndex(), optionalUser);
+            userService.setPendingRequests(requestForm, requestForm.getRequestHierarchy(),
+                    requestForm.getRequestIndex(), optionalUser);
         } catch (Exception e) {
             LOGGER.warn("Exception getting user and hierarchy", e);
         }
@@ -135,26 +167,28 @@ public class RequestFormController {
             throw new PDFNotConversionException("Could not store pdf");
         }
 
-
         RequestForm savedRequestForm = requestFormService.save(requestForm);
-        return modelMapper.map(savedRequestForm, ResponseRequestFormDTO.class);//truncated
+        return modelMapper.map(savedRequestForm, ResponseRequestFormDTO.class);// truncated
     }
 
     @PutMapping("/{requestFormId}")
-    public ResponseRequestFormDTO editRequestForm(@RequestBody RequestDTO requestDTO, @PathVariable Long requestFormId) throws ItemNotFoundException {
+    public ResponseRequestFormDTO editRequestForm(@RequestBody RequestDTO requestDTO, @PathVariable Long requestFormId)
+            throws ItemNotFoundException {
         RequestForm editedRequestForm = modelMapper.map(requestDTO, RequestForm.class);
 
-        return modelMapper.map(requestFormService.edit(requestFormId, editedRequestForm), ResponseRequestFormDTO.class); //truncated
+        return modelMapper.map(requestFormService.edit(requestFormId, editedRequestForm), ResponseRequestFormDTO.class); // truncated
     }
 
     @PostMapping("/{requestFormId}/approve")
-    public ResponseRequestFormDTO approveRequest(@PathVariable Long requestFormId, String comment) throws ItemNotFoundException {
+    public ResponseRequestFormDTO approveRequest(@PathVariable Long requestFormId, String comment)
+            throws ItemNotFoundException {
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
         RequestForm requestForm = requestFormService.findOne(requestFormId);
         if (requestForm.getStatus() != FinalStatus.PENDING)
             return modelMapper.map(requestForm, ResponseRequestFormDTO.class);
         int index = requestForm.getRequestIndex();
-        userService.removePendingRequests(requestForm, requestForm.getRequestHierarchy(), index, optionalUser, StatusEnum.ACCEPTED);
+        userService.removePendingRequests(requestForm, requestForm.getRequestHierarchy(), index, optionalUser,
+                StatusEnum.ACCEPTED);
         ReviewLog reviewLog = new ReviewLog();
         reviewLog.setComments(comment);
         reviewLog.setStatus(StatusEnum.ACCEPTED);
@@ -167,23 +201,27 @@ public class RequestFormController {
         requestForm.setRequestIndex(index + 1);
         index++;
         if (index < requestForm.getRequestHierarchy().size())
-            userService.setPendingRequests(requestForm, requestForm.getRequestHierarchy(), index, requestForm.getRequester());
+            userService.setPendingRequests(requestForm, requestForm.getRequestHierarchy(), index,
+                    requestForm.getRequester());
         else {
             requestForm.setStatus(FinalStatus.ACCEPTED);
         }
-        //TODO send mails to requester at every step and send mail to the next set of users assigned(update setPendingRequests() method to add this)
-        return modelMapper.map(requestFormService.save(requestForm), ResponseRequestFormDTO.class);//truncated
+        // TODO send mails to requester at every step and send mail to the next set of
+        // users assigned(update setPendingRequests() method to add this)
+        return modelMapper.map(requestFormService.save(requestForm), ResponseRequestFormDTO.class);// truncated
     }
 
     @PostMapping("/{requestFormId}/reject")
-    public ResponseRequestFormDTO rejectRequest(@PathVariable Long requestFormId, String comment) throws ItemNotFoundException {
+    public ResponseRequestFormDTO rejectRequest(@PathVariable Long requestFormId, String comment)
+            throws ItemNotFoundException {
 
         RequestForm requestForm = requestFormService.findOne(requestFormId);
         if (requestForm.getStatus() != FinalStatus.PENDING)
             return modelMapper.map(requestForm, ResponseRequestFormDTO.class);
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
         int index = requestForm.getRequestIndex();
-        userService.removePendingRequests(requestForm, requestForm.getRequestHierarchy(), index, optionalUser, StatusEnum.REJECTED);
+        userService.removePendingRequests(requestForm, requestForm.getRequestHierarchy(), index, optionalUser,
+                StatusEnum.REJECTED);
         requestForm.setRequestIndex((index + 1));
         ReviewLog reviewLog = new ReviewLog();
         reviewLog.setComments(comment);
@@ -193,8 +231,8 @@ public class RequestFormController {
         reviewLogService.addReview(reviewLog);
         requestForm.setStatus(FinalStatus.REJECTED);
         requestForm.getReviewLogs().add(reviewLog);
-        return modelMapper.map(requestFormService.save(requestForm), ResponseRequestFormDTO.class);//truncated
-        //TODO update requester with email
+        return modelMapper.map(requestFormService.save(requestForm), ResponseRequestFormDTO.class);// truncated
+        // TODO update requester with email
     }
 
     @GetMapping("/pdf/{requestFormId}")
@@ -203,7 +241,5 @@ public class RequestFormController {
         return modelMapper.map(requestForm, RequestFormPdfDTO.class);
 
     }
-
-
 
 }
