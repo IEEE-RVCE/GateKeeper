@@ -24,6 +24,10 @@ public class RequestFormService {
         return requestFormRepository.findById(requestFormId).orElseThrow(() -> new ItemNotFoundException(ITEM_NOT_FOUND + requestFormId));
     }
 
+    public List<RequestForm> findRequestsBySociety(Integer societyId)
+    {
+        return requestFormRepository.findByRequesterSociety(societyId);
+    }
     public RequestForm add(RequestForm requestForm) {
         return requestFormRepository.save(requestForm);
     }

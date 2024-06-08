@@ -46,6 +46,8 @@ public class ResponseRequestFormDTO {
 
     private boolean isFinance;
 
+    private boolean actionable;
+
     public boolean isFinance() {
         return isFinance;
     }
@@ -127,7 +129,12 @@ public class ResponseRequestFormDTO {
         this.updatedAt = updatedAt;
     }
 
+    public boolean isActionable() {
+        return actionable;
+    }
 
-
+    public void setActionable(boolean actionable) {
+        this.actionable = actionable;
+    }
 }
 

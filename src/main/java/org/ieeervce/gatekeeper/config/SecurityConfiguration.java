@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.ieeervce.gatekeeper.entity.User;
 import org.ieeervce.gatekeeper.service.UserInfoUserDetailsService;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -41,8 +42,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.failureForwardUrl("/loginStatus/failed").successForwardUrl("/loginStatus/success"))
                 .httpBasic(Customizer.withDefaults())
+
                 .authorizeHttpRequests(SecurityConfiguration::getCustomizedHttpAuthorization)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(customizer->customizer.configurationSource(corsConfigurationSource()));
