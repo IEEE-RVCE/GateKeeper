@@ -9,11 +9,7 @@ import java.util.Optional;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestFormPdfDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.ResponseRequestFormDTO;
-import org.ieeervce.gatekeeper.entity.FinalStatus;
-import org.ieeervce.gatekeeper.entity.RequestForm;
-import org.ieeervce.gatekeeper.entity.ReviewLog;
-import org.ieeervce.gatekeeper.entity.StatusEnum;
-import org.ieeervce.gatekeeper.entity.User;
+import org.ieeervce.gatekeeper.entity.*;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.exception.PDFNotConversionException;
@@ -27,6 +23,7 @@ import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,22 +70,17 @@ public class RequestFormController {
     @GetMapping
     public List<RequestDTO> getAll() {
         String requesterEmail = getRequesterDetails();
-        Optional<User> optionalUser = userService.getUserByEmail(requesterEmail);
-
+        User optionalUser = userService.getUserByEmail(requesterEmail).get();
         List<RequestForm> requestFormList = new ArrayList<>();
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            try {
-                Integer societyId = user.getSociety().getSocietyId();
-                requestFormList = requestFormService.findRequestsBySociety(societyId);
-            } catch (Exception e) {
-                LOGGER.error("Error fetching requests by society", e);
-                requestFormList = requestFormService.list();
-            }
-        } else {
-            LOGGER.warn("User not found with email: " + requesterEmail);
-            requestFormList = requestFormService.list();
+        Integer userRoleValue=optionalUser.getRole().getValue();
+        if(userRoleValue.equals(RoleValue.SocietyExecom.getValue())||userRoleValue.equals(RoleValue.FacultyAdvisor.getValue()))
+        {
+            Integer societyId=optionalUser.getSociety().getSocietyId();
+            requestFormList=requestFormService.findRequestsBySociety(societyId);
+        }
+        else
+        {
+            requestFormList=requestFormService.list();
         }
 
         Type listType = new TypeToken<List<RequestDTO>>() {
@@ -183,7 +175,20 @@ public class RequestFormController {
     public ResponseRequestFormDTO approveRequest(@PathVariable Long requestFormId, String comment)
             throws ItemNotFoundException {
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        List<RequestForm> pendingRequests=optionalUser.getPendingRequests();
+        boolean canApprove=false;
+        for(RequestForm requestForm:pendingRequests)
+        {
+            if(requestForm.getRequestFormId().equals(requestFormId))
+                canApprove=true;
+        }
+        if(!canApprove)
+        {
+            throw new AccessDeniedException("User not authorized to approve this request form.");
+        }
+
         RequestForm requestForm = requestFormService.findOne(requestFormId);
+
         if (requestForm.getStatus() != FinalStatus.PENDING)
             return modelMapper.map(requestForm, ResponseRequestFormDTO.class);
         int index = requestForm.getRequestIndex();
@@ -219,6 +224,18 @@ public class RequestFormController {
         if (requestForm.getStatus() != FinalStatus.PENDING)
             return modelMapper.map(requestForm, ResponseRequestFormDTO.class);
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        List<RequestForm> pendingRequests=optionalUser.getPendingRequests();
+        boolean canReject=false;
+        for(RequestForm form:pendingRequests)
+        {
+            if(form.getRequestFormId().equals(requestFormId))
+                canReject=true;
+        }
+        if(!canReject)
+        {
+            throw new AccessDeniedException("User not authorized to reject this request form.");
+        }
+
         int index = requestForm.getRequestIndex();
         userService.removePendingRequests(requestForm, requestForm.getRequestHierarchy(), index, optionalUser,
                 StatusEnum.REJECTED);
