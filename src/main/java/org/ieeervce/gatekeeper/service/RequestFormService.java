@@ -58,8 +58,4 @@ public class RequestFormService {
         return requestFormRepository.findAllByRequesterOrderByCreatedAtDesc(user);
     }
 
-
-    public List<RequestForm> getAllRequests() {
-        return requestFormRepository.findAll();
-    }
 }
