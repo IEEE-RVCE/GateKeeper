@@ -63,8 +63,6 @@ public class SecurityConfiguration {
                 .requestMatchers("/society").hasRole("Admin")
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/loginStatus/**").permitAll()
-                .requestMatchers("/logout").permitAll()
-                .requestMatchers("/login").permitAll()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 .anyRequest().authenticated();
 
