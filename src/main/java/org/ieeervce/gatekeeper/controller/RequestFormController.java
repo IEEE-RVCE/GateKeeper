@@ -18,6 +18,7 @@ import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,12 +65,13 @@ public class RequestFormController {
     public List<RequestDTO> getAll() {
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
         List<RequestForm> requestFormList;
-        try
+        Integer userRoleValue=optionalUser.getRole().getValue();
+        if(userRoleValue.equals(RoleValue.SocietyExecom.getValue())||userRoleValue.equals(RoleValue.FacultyAdvisor.getValue()))
         {
             Integer societyId=optionalUser.getSociety().getSocietyId();
             requestFormList=requestFormService.findRequestsBySociety(societyId);
         }
-        catch(Exception e)
+        else
         {
             requestFormList=requestFormService.list();
         }
@@ -150,7 +152,20 @@ public class RequestFormController {
     @PostMapping("/{requestFormId}/approve")
     public ResponseRequestFormDTO approveRequest(@PathVariable Long requestFormId, String comment) throws ItemNotFoundException {
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        List<RequestForm> pendingRequests=optionalUser.getPendingRequests();
+        boolean canApprove=false;
+        for(RequestForm requestForm:pendingRequests)
+        {
+            if(requestForm.getRequestFormId().equals(requestFormId))
+                canApprove=true;
+        }
+        if(!canApprove)
+        {
+            throw new AccessDeniedException("User not authorized to approve this request form.");
+        }
+
         RequestForm requestForm = requestFormService.findOne(requestFormId);
+
         if (requestForm.getStatus() != FinalStatus.PENDING)
             return modelMapper.map(requestForm, ResponseRequestFormDTO.class);
         int index = requestForm.getRequestIndex();
@@ -182,6 +197,18 @@ public class RequestFormController {
         if (requestForm.getStatus() != FinalStatus.PENDING)
             return modelMapper.map(requestForm, ResponseRequestFormDTO.class);
         User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        List<RequestForm> pendingRequests=optionalUser.getPendingRequests();
+        boolean canReject=false;
+        for(RequestForm form:pendingRequests)
+        {
+            if(form.getRequestFormId().equals(requestFormId))
+                canReject=true;
+        }
+        if(!canReject)
+        {
+            throw new AccessDeniedException("User not authorized to reject this request form.");
+        }
+
         int index = requestForm.getRequestIndex();
         userService.removePendingRequests(requestForm, requestForm.getRequestHierarchy(), index, optionalUser, StatusEnum.REJECTED);
         requestForm.setRequestIndex((index + 1));
