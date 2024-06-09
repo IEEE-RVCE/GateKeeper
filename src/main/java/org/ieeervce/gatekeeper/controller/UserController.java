@@ -1,5 +1,7 @@
 package org.ieeervce.gatekeeper.controller;
 
+import org.ieeervce.gatekeeper.dto.RequestForm.ResponseRequestFormDTO;
+import org.ieeervce.gatekeeper.dto.User.UserAuthDTO;
 import org.ieeervce.gatekeeper.dto.User.UserResponseDTO;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
@@ -67,9 +69,10 @@ public class UserController {
         return userService.saveUser(user);
     }
     @GetMapping
-    public String getUser()
+    public UserAuthDTO getUser()
     {
-        return getRequesterDetails();
+        User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        return modelMapper.map(optionalUser, UserAuthDTO.class);
     }
     @GetMapping("/{email}")
     public UserResponseDTO getUserByEmail(@PathVariable String email) throws ItemNotFoundException{
