@@ -14,16 +14,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @RestController
 public class GateKeeperApplication {
-	@Autowired
-	EmailService emailService ;
 	@GetMapping("/")
 	String index() throws Exception{
-		EmailDTO emailDTO = new EmailDTO();
-		emailDTO.setRecipient("chiragwork2403@gmail.com");
-		emailDTO.setMessageBody("hey");
-		emailDTO.setSubject("Test mail");
-		emailDTO.setName("Chirag Jaiswal");
-        return emailService.sendSimpleMail(emailDTO);
+		return "gatekeeper";
 	}
 
 	public static void main(String[] args) {

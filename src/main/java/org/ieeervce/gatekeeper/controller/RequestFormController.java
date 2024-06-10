@@ -6,6 +6,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import jakarta.mail.MessagingException;
+import org.ieeervce.gatekeeper.dto.Email.EmailDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestFormPdfDTO;
 import org.ieeervce.gatekeeper.dto.RequestForm.ResponseRequestFormDTO;
@@ -13,15 +15,13 @@ import org.ieeervce.gatekeeper.entity.*;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.exception.PDFNotConversionException;
-import org.ieeervce.gatekeeper.service.RequestFormService;
-import org.ieeervce.gatekeeper.service.ReviewLogService;
-import org.ieeervce.gatekeeper.service.RoleService;
-import org.ieeervce.gatekeeper.service.UserService;
+import org.ieeervce.gatekeeper.service.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +48,9 @@ public class RequestFormController {
     private final RoleService roleService;
     private final UserService userService;
     private final ReviewLogService reviewLogService;
+    @Autowired
+    EmailService emailService ;
+
     PropertyMap<RequestForm, ResponseRequestFormDTO> skipReferencedFieldsMap = new PropertyMap<RequestForm, ResponseRequestFormDTO>() {
         @Override
         protected void configure() {
@@ -203,6 +206,19 @@ public class RequestFormController {
 
         reviewLogService.addReview(reviewLog);
         requestForm.getReviewLogs().add(reviewLog);
+
+        //Logic for Sending Mails to Requester
+        try{
+            String messageBody = "Your request for Event Titled" + requestForm.getEventTitle() +" has successfully been approved by "+ optionalUser.getName() +".";
+            User requester = requestForm.getRequester();
+            EmailDTO emailDTO = new EmailDTO(requester,messageBody,requestForm);
+            emailDTO.setSubject("Approved By "+optionalUser.getName());
+            emailService.sendSimpleMail(emailDTO);
+        }
+        catch (MessagingException e){
+            LOGGER.error("Approval Confirmation Mail To Requester Failed");
+        }
+
         requestForm.setRequestIndex(index + 1);
         index++;
         if (index < requestForm.getRequestHierarchy().size())
@@ -210,9 +226,18 @@ public class RequestFormController {
                     requestForm.getRequester());
         else {
             requestForm.setStatus(FinalStatus.ACCEPTED);
+            try{
+                String messageBody = "Your request for Event Titled , " + requestForm.getEventTitle() +" has been approved.";
+                User requester = requestForm.getRequester();
+                EmailDTO emailDTO = new EmailDTO(requester,messageBody,requestForm);
+                emailDTO.setSubject("Event Request Approved");
+                emailService.sendSimpleMail(emailDTO);
+            }
+            catch (MessagingException e)
+            {
+                LOGGER.error("ACCEPTED Request Mail Failed");
+            }
         }
-        // TODO send mails to requester at every step and send mail to the next set of
-        // users assigned(update setPendingRequests() method to add this)
         return modelMapper.map(requestFormService.save(requestForm), ResponseRequestFormDTO.class);// truncated
     }
 
@@ -248,8 +273,17 @@ public class RequestFormController {
         reviewLogService.addReview(reviewLog);
         requestForm.setStatus(FinalStatus.REJECTED);
         requestForm.getReviewLogs().add(reviewLog);
+        try{
+            String messageBody = "Your request for Event Titled , " + requestForm.getEventTitle() +" has been rejected.";
+            User requester = requestForm.getRequester();
+            EmailDTO emailDTO = new EmailDTO(requester,messageBody,requestForm);
+            emailDTO.setSubject("Event Request Rejected");
+            emailService.sendSimpleMail(emailDTO);
+        }
+        catch (MessagingException e){
+            LOGGER.error("Failed To Send Rejection Mail");
+        }
         return modelMapper.map(requestFormService.save(requestForm), ResponseRequestFormDTO.class);// truncated
-        // TODO update requester with email
     }
 
     @GetMapping("/pdf/{requestFormId}")
