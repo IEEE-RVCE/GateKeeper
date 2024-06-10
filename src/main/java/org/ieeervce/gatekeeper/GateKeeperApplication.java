@@ -22,6 +22,7 @@ public class GateKeeperApplication {
 		emailDTO.setRecipient("chiragwork2403@gmail.com");
 		emailDTO.setMessageBody("hey");
 		emailDTO.setSubject("Test mail");
+		emailDTO.setName("Chirag Jaiswal");
         return emailService.sendSimpleMail(emailDTO);
 	}
 

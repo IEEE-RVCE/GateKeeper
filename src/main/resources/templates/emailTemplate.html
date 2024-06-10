@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .header {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+        }
+        .body {
+            margin: 20px;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<div class="content">
+    <div class="header">
+        <h1 th:text="${header}"></h1>
+    </div>
+    <div class="body">
+        <p>Dear <span th:text="${name}">User</span>,</p>
+        <p th:text="${messageBody}"></p>
+    </div>
+    <div class="footer">
+    </div>
+</div>
+</body>
+</html>

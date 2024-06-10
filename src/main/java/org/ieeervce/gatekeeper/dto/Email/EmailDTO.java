@@ -5,6 +5,15 @@ public class EmailDTO {
     private String messageBody;
     private String subject;
     private String attachment;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getRecipient() {
         return recipient;
