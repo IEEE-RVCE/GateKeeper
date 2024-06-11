@@ -138,6 +138,7 @@ public class RequestFormController {
             @RequestParam("isFinance") boolean isFinance, @RequestParam("formPDF") MultipartFile formPDF)
             throws InvalidDataException, PDFNotConversionException {
         LOGGER.info("in: post request form");
+        RequestForm savedRequestForm;
         RequestForm requestForm = new RequestForm();
         requestForm.setEventTitle(eventTitle);
         requestForm.setFinance(isFinance);
@@ -150,20 +151,18 @@ public class RequestFormController {
 
             requestForm.setRequestHierarchy(roleService.generateHierarchy(optionalUser, isFinance));
 
+            requestForm.setFormPDF(formPDF.getBytes());
+
+
+
             userService.setPendingRequests(requestForm, requestForm.getRequestHierarchy(),
                     requestForm.getRequestIndex(), optionalUser);
+
         } catch (Exception e) {
             LOGGER.warn("Exception getting user and hierarchy", e);
         }
-
-        try {
-            requestForm.setFormPDF(formPDF.getBytes());
-        } catch (java.io.IOException e) {
-            throw new PDFNotConversionException("Could not store pdf");
-        }
-
-        RequestForm savedRequestForm = requestFormService.save(requestForm);
-        return modelMapper.map(savedRequestForm, ResponseRequestFormDTO.class);// truncated
+        savedRequestForm = requestFormService.save(requestForm);
+        return modelMapper.map(savedRequestForm, ResponseRequestFormDTO.class);
     }
 
     @PutMapping("/{requestFormId}")
