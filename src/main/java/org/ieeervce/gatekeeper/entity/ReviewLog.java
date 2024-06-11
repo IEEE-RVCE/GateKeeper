@@ -2,6 +2,9 @@ package org.ieeervce.gatekeeper.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class ReviewLog {
@@ -21,6 +24,9 @@ public class ReviewLog {
     private StatusEnum status;
     @Column(nullable = true)
     private String comments;
+    @CreationTimestamp
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
     public Long getReviewLogId() {
         return reviewLogId;
@@ -60,5 +66,13 @@ public class ReviewLog {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
