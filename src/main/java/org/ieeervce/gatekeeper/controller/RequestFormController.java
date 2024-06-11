@@ -4,6 +4,7 @@ import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterD
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
@@ -23,6 +24,7 @@ import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -253,10 +255,10 @@ public class RequestFormController {
     }
 
     @GetMapping("/pdf/{requestFormId}")
-    private RequestFormPdfDTO formPdf(@PathVariable Long requestFormId) throws ItemNotFoundException {
+    private ResponseEntity formPdf(@PathVariable Long requestFormId) throws ItemNotFoundException {
         RequestForm requestForm = requestFormService.findOne(requestFormId);
-        return modelMapper.map(requestForm, RequestFormPdfDTO.class);
-
+        byte[] pdfBytes = requestForm.getFormPDF();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(pdfBytes);
     }
 
 }
