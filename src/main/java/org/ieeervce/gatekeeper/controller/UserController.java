@@ -81,14 +81,14 @@ public class UserController {
                 .orElseThrow(()->new ItemNotFoundException("User Not Found"));
     }
     @PutMapping()
-    public ResponseEntity userPasswordUpdate(String currentPassword, String newPassword) throws IncorrectPasswordException
+    public ResponseEntity<?> userPasswordUpdate(String currentPassword, String newPassword) throws IncorrectPasswordException
     {
         User user= userService.getUserByEmail(getRequesterDetails()).get();
         if(!passwordEncoder.matches(currentPassword,user.getPassword()))
             throw new IncorrectPasswordException("Wrong password");
         userService.updatePassword(user,passwordEncoder.encode(newPassword));
 
-        return (ResponseEntity) ResponseEntity.ok();
+        return ResponseEntity.ok().build();
     }
 
 }
