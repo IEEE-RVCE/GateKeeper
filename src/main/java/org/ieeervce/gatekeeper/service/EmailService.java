@@ -41,7 +41,7 @@ public class EmailService {
 
                 String htmlContent = templateEngine.process("emailTemplate",context);
                 mimeMessageHelper.setText(htmlContent,true);
-                mimeMessageHelper.addAttachment("Event PDF",new ByteArrayResource(emailDetails.getAttachment()));
+                mimeMessageHelper.addAttachment("Event PDF.pdf",new ByteArrayResource(emailDetails.getAttachment()));
                 javaMailSender.send(mimeMessage);
             }
             catch (MessagingException e) {
