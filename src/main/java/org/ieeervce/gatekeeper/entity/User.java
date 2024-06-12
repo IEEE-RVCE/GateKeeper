@@ -50,6 +50,9 @@ public class User {
     @Column(nullable = false)
     private  boolean enabled;
 
+    @Column(nullable = false)
+    private boolean firstLogin=true;
+
     @ManyToMany
     @JoinTable(
             name = "pendingRequests",
@@ -183,5 +186,13 @@ public class User {
     }
     public void setRole(Role role){
         this.role= role;
+    }
+
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 }
