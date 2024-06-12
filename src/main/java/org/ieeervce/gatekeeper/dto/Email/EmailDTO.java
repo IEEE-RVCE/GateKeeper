@@ -18,7 +18,7 @@ public class EmailDTO {
         this.messageBody=messageBody;
         this.name = user.getName().split(" ")[0];
         this.attachment = requestForm.getFormPDF();
-        this.formLink = "gate.ieee-rvce.org/requestForm/"+requestForm.getRequestFormId();
+        this.formLink = "gate.ieee-rvce.org/event/"+requestForm.getRequestFormId();
     }
     public void setFormLink(String formLink) {
         this.formLink = formLink;
