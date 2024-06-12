@@ -85,4 +85,9 @@ public class UserService {
             }
         }
     }
+
+    public void updatePassword(User user, String newEncodedPassword) {
+        user.setPassword(newEncodedPassword);
+        user.setFirstLogin(false);
+    }
 }

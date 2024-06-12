@@ -18,6 +18,7 @@ public class UserResponseDTO {
     private boolean unsubscribed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean firstLogin;
     private List<RequestDTO> approvedRequests;
     private List<RequestDTO> pendingRequests;
     private List<RequestDTO> rejectedRequests;
@@ -111,6 +112,14 @@ public class UserResponseDTO {
 
     public void setRejectedRequests(List<RequestDTO> rejectedRequests) {
         this.rejectedRequests = rejectedRequests;
+    }
+
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 }
 
