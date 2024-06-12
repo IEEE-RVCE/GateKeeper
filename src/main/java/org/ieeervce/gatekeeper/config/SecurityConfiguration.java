@@ -57,7 +57,6 @@ public class SecurityConfiguration {
         customizer
 
                 .requestMatchers(HttpMethod.POST,"/user").hasRole("Admin")
-                .requestMatchers(HttpMethod.PUT,"/user").hasRole("Admin")
                 .requestMatchers(HttpMethod.DELETE,"/user").hasRole("Admin")
                 .requestMatchers(HttpMethod.POST,"/requestForm").hasAnyRole("Society Execom","Main Execom")
                 .requestMatchers("/role").hasRole("Admin")

@@ -84,7 +84,7 @@ public class UserController {
     public ResponseEntity userPasswordUpdate(String currentPassword, String newPassword) throws IncorrectPasswordException
     {
         User user= userService.getUserByEmail(getRequesterDetails()).get();
-        if(!user.getPassword().equals(passwordEncoder.encode(currentPassword)))
+        if(!passwordEncoder.matches(currentPassword,user.getPassword()))
             throw new IncorrectPasswordException("Wrong password");
         userService.updatePassword(user,passwordEncoder.encode(newPassword));
 
