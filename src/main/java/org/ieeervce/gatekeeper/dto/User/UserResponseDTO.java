@@ -1,6 +1,8 @@
 package org.ieeervce.gatekeeper.dto.User;
 
 import org.ieeervce.gatekeeper.dto.RequestForm.RequestDTO;
+import org.ieeervce.gatekeeper.dto.Role.RoleDTO;
+import org.ieeervce.gatekeeper.entity.Role;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +12,7 @@ public class UserResponseDTO {
     private String email;
 
     private Integer societyId;
-    private Integer roleId;
+    private RoleDTO role;
 
     private boolean enabled;
     private boolean unsubscribed;
@@ -64,12 +66,12 @@ public class UserResponseDTO {
     }
 
 
-    public Integer getRoleId() {
-        return roleId;
+    public RoleDTO getRole() {
+        return role;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRole(RoleDTO role) {
+        this.role = role;
     }
 
     public Integer getSocietyId() {
