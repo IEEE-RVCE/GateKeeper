@@ -1,7 +1,9 @@
 package org.ieeervce.gatekeeper.service;
 
+import org.ieeervce.gatekeeper.dto.User.UserResponseDTO;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
@@ -17,7 +19,8 @@ public class UserService {
     private final String ITEM_NOT_FOUND = "User Id not found";
 
     private final UserRepository repository;
-
+    @Autowired
+    private ModelMapper modelMapper;
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
@@ -90,5 +93,10 @@ public class UserService {
         user.setPassword(newEncodedPassword);
         user.setFirstLogin(false);
         repository.save(user);
+    }
+
+    public User edit(User user, UserResponseDTO userResponseDTO) {
+        modelMapper.map(userResponseDTO, user);
+        return repository.save(user);
     }
 }

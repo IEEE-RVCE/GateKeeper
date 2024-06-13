@@ -90,5 +90,12 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+    @PutMapping("/update")
+    public UserResponseDTO updateUser(UserResponseDTO userResponseDTO)
+    {
+        User user= userService.getUserByEmail(getRequesterDetails()).get();
+        user=userService.edit(user,userResponseDTO);
+        return modelMapper.map(user, UserResponseDTO.class);
+    }
 
 }
