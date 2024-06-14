@@ -1,6 +1,7 @@
 package org.ieeervce.gatekeeper.controller;
 
 import org.ieeervce.gatekeeper.dto.User.UserResponseDTO;
+import org.ieeervce.gatekeeper.exception.IncorrectPasswordException;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.dto.User.UserDTO;
@@ -12,6 +13,7 @@ import org.ieeervce.gatekeeper.service.SocietyService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.ieeervce.gatekeeper.service.UserService;
@@ -77,6 +79,16 @@ public class UserController {
         return userOptional
                 .map(user->modelMapper.map(user, UserResponseDTO.class))
                 .orElseThrow(()->new ItemNotFoundException("User Not Found"));
+    }
+    @PutMapping()
+    public ResponseEntity<?> userPasswordUpdate(String currentPassword, String newPassword) throws IncorrectPasswordException
+    {
+        User user= userService.getUserByEmail(getRequesterDetails()).get();
+        if(!passwordEncoder.matches(currentPassword,user.getPassword()))
+            throw new IncorrectPasswordException("Wrong password");
+        userService.updatePassword(user,passwordEncoder.encode(newPassword));
+
+        return ResponseEntity.ok().build();
     }
 
 }
