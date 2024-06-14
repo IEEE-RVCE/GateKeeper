@@ -160,7 +160,9 @@ public class RequestFormController {
         savedRequestForm = requestFormService.save(requestForm);
         userService.setPendingRequests(savedRequestForm, savedRequestForm.getRequestHierarchy(),
         savedRequestForm.getRequestIndex(), optionalUser);
+
         savedRequestForm=requestFormService.save(savedRequestForm);
+
         return modelMapper.map(savedRequestForm, ResponseRequestFormDTO.class);
     }
 
