@@ -2,6 +2,7 @@ package org.ieeervce.gatekeeper.controller;
 
 import static org.ieeervce.gatekeeper.config.SecurityConfiguration.getRequesterDetails;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -138,7 +139,7 @@ public class RequestFormController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseRequestFormDTO postRequestForm(@RequestParam("eventTitle") String eventTitle,
             @RequestParam("isFinance") boolean isFinance, @RequestParam("formPDF") MultipartFile formPDF)
-            throws InvalidDataException, PDFNotConversionException {
+             {
         LOGGER.info("in: post request form");
         RequestForm savedRequestForm;
         RequestForm requestForm = new RequestForm();
@@ -147,23 +148,18 @@ public class RequestFormController {
         requestForm.setStatus(FinalStatus.PENDING);
 
         LOGGER.debug("Requester Details: {}", getRequesterDetails());
+        User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
+        requestForm.setRequester(optionalUser);
+        requestForm.setRequestHierarchy(roleService.generateHierarchy(optionalUser, isFinance));
         try {
-            User optionalUser = userService.getUserByEmail(getRequesterDetails()).get();
-            requestForm.setRequester(optionalUser);
-
-            requestForm.setRequestHierarchy(roleService.generateHierarchy(optionalUser, isFinance));
-
-            requestForm.setFormPDF(formPDF.getBytes());
-
-
-
-            userService.setPendingRequests(requestForm, requestForm.getRequestHierarchy(),
-                    requestForm.getRequestIndex(), optionalUser);
-
-        } catch (Exception e) {
-            LOGGER.warn("Exception getting user and hierarchy", e);
+             requestForm.setFormPDF(formPDF.getBytes());
         }
+        catch (IOException e) {
+            LOGGER.warn("Exception on converting pdf to bytes", e);
+         }
         savedRequestForm = requestFormService.save(requestForm);
+        userService.setPendingRequests(savedRequestForm, savedRequestForm.getRequestHierarchy(),
+        savedRequestForm.getRequestIndex(), optionalUser);
         return modelMapper.map(savedRequestForm, ResponseRequestFormDTO.class);
     }
 
