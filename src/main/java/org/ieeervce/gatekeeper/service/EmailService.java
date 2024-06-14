@@ -29,8 +29,8 @@ public class EmailService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(sender);
         simpleMailMessage.setTo(userEmail);
-        simpleMailMessage.setSubject("GATEKEEPER USER CREDENTIALS");
-        simpleMailMessage.setText("EMAIL: " + userEmail + "\nPASSWORD: "+userPassword);
+        simpleMailMessage.setSubject("GateKeeper Account Successfully Created!");
+        simpleMailMessage.setText("Dear User,\n Your GateKeeper account has successfully been created!\nPlease login to https://gate.ieee-rvce.org/ and change your password as soon as you can.\n\nEmail: " + userEmail + "\nPassword: "+userPassword+"\n\nThank you,\nIEEE RVCE Web Team");
         javaMailSender.send(simpleMailMessage);
     }
     @Async
