@@ -1,5 +1,6 @@
 package org.ieeervce.gatekeeper.controller;
 
+import jakarta.mail.MessagingException;
 import org.ieeervce.gatekeeper.dto.User.UserResponseDTO;
 import org.ieeervce.gatekeeper.exception.IncorrectPasswordException;
 import org.ieeervce.gatekeeper.exception.InvalidDataException;
@@ -52,7 +53,7 @@ public class UserController {
     EmailService emailService;
 
     @PostMapping
-    User addUser(@RequestBody UserDTO userDTO) throws InvalidDataException {
+    User addUser(@RequestBody UserDTO userDTO) throws InvalidDataException, MessagingException {
             User user = modelMapper.map(userDTO,User.class);
              user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             try {
@@ -67,7 +68,7 @@ public class UserController {
                 throw new InvalidDataException("Invalid Data");
             }
          User savedUser = userService.saveUser(user);
-         emailService.sendUserCredentials(userDTO.getEmail(),userDTO.getPassword());
+         emailService.sendUserCredentials(userDTO.getName(), userDTO.getEmail(),userDTO.getPassword());
          return savedUser;
     }
     @GetMapping
