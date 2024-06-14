@@ -8,6 +8,7 @@ import org.ieeervce.gatekeeper.dto.User.UserDTO;
 import org.ieeervce.gatekeeper.entity.Role;
 import org.ieeervce.gatekeeper.entity.Society;
 import org.ieeervce.gatekeeper.entity.User;
+import org.ieeervce.gatekeeper.service.EmailService;
 import org.ieeervce.gatekeeper.service.RoleService;
 import org.ieeervce.gatekeeper.service.SocietyService;
 import org.modelmapper.ModelMapper;
@@ -47,10 +48,12 @@ public class UserController {
         this.modelMapper.addMappings(skipReferencedFieldsMap);
         this.modelMapper.getConfiguration().setAmbiguityIgnored(true);
     }
+    @Autowired
+    EmailService emailService;
 
     @PostMapping
     User addUser(@RequestBody UserDTO userDTO) throws InvalidDataException {
-        User user = modelMapper.map(userDTO,User.class);
+            User user = modelMapper.map(userDTO,User.class);
              user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             try {
                 if(userDTO.getSocietyId()!=null) {
@@ -63,10 +66,9 @@ public class UserController {
             catch (ItemNotFoundException e){
                 throw new InvalidDataException("Invalid Data");
             }
-
-
-
-        return userService.saveUser(user);
+         User savedUser = userService.saveUser(user);
+         emailService.sendUserCredentials(userDTO.getEmail(),userDTO.getPassword());
+         return savedUser;
     }
     @GetMapping
     public String getUser()

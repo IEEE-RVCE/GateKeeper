@@ -38,4 +38,3 @@ out/
 
 .env.prod
 /src/main/resources/application-prod.properties
-

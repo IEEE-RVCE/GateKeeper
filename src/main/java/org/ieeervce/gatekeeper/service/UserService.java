@@ -1,7 +1,12 @@
 package org.ieeervce.gatekeeper.service;
 
+import jakarta.mail.MessagingException;
+import org.ieeervce.gatekeeper.controller.RequestFormController;
+import org.ieeervce.gatekeeper.dto.Email.EmailDTO;
 import org.ieeervce.gatekeeper.exception.ItemNotFoundException;
 import org.ieeervce.gatekeeper.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.ieeervce.gatekeeper.repository.UserRepository;
@@ -16,7 +21,11 @@ public class UserService {
     private RoleValue roleValue;
     private final String ITEM_NOT_FOUND = "User Id not found";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
     private final UserRepository repository;
+    @Autowired
+    EmailService emailService ;
 
     public UserService(UserRepository repository) {
         this.repository = repository;
@@ -62,6 +71,15 @@ public class UserService {
         }
         for (User u : users) {
             u.getPendingRequests().add(requestForm);
+            String messageBody ="Request for approval for the event titled " + requestForm.getEventTitle() + ", submitted by " + u.getName() + ".";
+            EmailDTO emailDTO = new EmailDTO(u,messageBody,requestForm);
+            emailDTO.setSubject("Mail For Approval - IEEE Event");
+            try{
+            emailService.sendSimpleMail(emailDTO);
+            }
+            catch (MessagingException e){
+                LOGGER.error("Failed To Send Mail For Approval");
+            }
         }
     }
 
