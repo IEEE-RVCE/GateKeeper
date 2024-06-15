@@ -71,7 +71,7 @@ public class UserService {
         }
         for (User u : users) {
             u.getPendingRequests().add(requestForm);
-            String messageBody ="Request for approval for the event titled " + requestForm.getEventTitle() + ", submitted by " + u.getName() + ".";
+            String messageBody ="Request for approval for the event titled " + requestForm.getEventTitle() + ", submitted by " + requestForm.getRequester().getName() + ".";
             EmailDTO emailDTO = new EmailDTO(u,messageBody,requestForm);
             emailDTO.setSubject("Mail For Approval - IEEE Event");
             try{
