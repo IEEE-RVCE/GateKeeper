@@ -36,11 +36,13 @@ public class EmailService {
         Context context = new Context();
         context.setVariable("header", "GateKeeper Account Successfully Created!");
         context.setVariable("name", userName);
-        context.setVariable("messageBody", "Your GateKeeper account has successfully been created! Please login to https://gate.ieee-rvce.org/ and change your password as soon as you can.<br><br>Email: " + userEmail + "<br>Password: " + userPassword);
+        context.setVariable("messageBody", "Your GateKeeper account has successfully been created! Please login to https://gate.ieee-rvce.org/ and change your password as soon as you can.");
+        context.setVariable("emailId","Email: " + userEmail);
+        context.setVariable("password","Password: " + userPassword);
         context.setVariable("linkUrl", "https://gate.ieee-rvce.org/login");
         context.setVariable("buttonText", "Click here to Login");
 
-        String htmlContent = templateEngine.process("emailTemplate", context);
+        String htmlContent = templateEngine.process("userEmailTemplate", context);
         mimeMessageHelper.setText(htmlContent, true);
 
         javaMailSender.send(mimeMessage);
