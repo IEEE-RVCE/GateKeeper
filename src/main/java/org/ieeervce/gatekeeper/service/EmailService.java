@@ -25,14 +25,27 @@ public class EmailService {
     private TemplateEngine templateEngine;
     @Value("${spring.mail.username}") private String sender;
     @Async
-    public void sendUserCredentials(String userEmail,String userPassword) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(sender);
-        simpleMailMessage.setTo(userEmail);
-        simpleMailMessage.setSubject("GateKeeper Account Successfully Created!");
-        simpleMailMessage.setText("Dear User,\n Your GateKeeper account has successfully been created!\nPlease login to https://gate.ieee-rvce.org/ and change your password as soon as you can.\n\nEmail: " + userEmail + "\nPassword: "+userPassword+"\n\nThank you,\nIEEE RVCE Web Team");
-        javaMailSender.send(simpleMailMessage);
+    public void sendUserCredentials(String userName, String userEmail, String userPassword) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+        mimeMessageHelper.setFrom(sender);
+        mimeMessageHelper.setTo(userEmail);
+        mimeMessageHelper.setSubject("GateKeeper Account Successfully Created!");
+
+        Context context = new Context();
+        context.setVariable("header", "GateKeeper Account Successfully Created!");
+        context.setVariable("name", userName);
+        context.setVariable("messageBody", "Your GateKeeper account has successfully been created! Please login to https://gate.ieee-rvce.org/ and change your password as soon as you can.<br><br>Email: " + userEmail + "<br>Password: " + userPassword);
+        context.setVariable("linkUrl", "https://gate.ieee-rvce.org/login");
+        context.setVariable("buttonText", "Click here to Login");
+
+        String htmlContent = templateEngine.process("emailTemplate", context);
+        mimeMessageHelper.setText(htmlContent, true);
+
+        javaMailSender.send(mimeMessage);
     }
+
     @Async
     public void sendSimpleMail(EmailDTO emailDetails) throws MessagingException{
 
@@ -49,6 +62,7 @@ public class EmailService {
                 context.setVariable("name",emailDetails.getName().split(" ")[0]);
                 context.setVariable("messageBody",emailDetails.getMessageBody());
                 context.setVariable("linkUrl",emailDetails.getFormLink());
+                context.setVariable("buttonText","Click here to view the Request");
 
                 String htmlContent = templateEngine.process("emailTemplate",context);
                 mimeMessageHelper.setText(htmlContent,true);
