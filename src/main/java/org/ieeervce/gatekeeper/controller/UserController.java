@@ -55,6 +55,7 @@ public class UserController {
     @PostMapping
     User addUser(@RequestBody UserDTO userDTO) throws InvalidDataException, MessagingException {
             User user = modelMapper.map(userDTO,User.class);
+            user.setEmail(user.getEmail().trim());
              user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             try {
                 if(userDTO.getSocietyId()!=null) {
