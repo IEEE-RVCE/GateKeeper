@@ -58,4 +58,7 @@ public class RequestFormService {
         return requestFormRepository.findAllByRequesterOrderByCreatedAtDesc(user);
     }
 
+    public List<RequestForm> findFinancialRequests() {
+        return requestFormRepository.findAllByIsFinanceOrderByCreatedAtDesc(true);
+    }
 }

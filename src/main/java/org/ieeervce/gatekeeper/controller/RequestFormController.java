@@ -84,6 +84,10 @@ public class RequestFormController {
             Integer societyId=optionalUser.getSociety().getSocietyId();
             requestFormList=requestFormService.findRequestsBySociety(societyId);
         }
+        else if(userRoleValue.equals((RoleValue.FinanceHead).getValue()))
+        {
+            requestFormList=requestFormService.findFinancialRequests();
+        }
         else
         {
             requestFormList=requestFormService.list();
